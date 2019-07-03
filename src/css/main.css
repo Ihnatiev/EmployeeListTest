@@ -1,0 +1,36 @@
+header{
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+ }
+ 
+ /* Menu */
+ .menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: darkturquoise;
+ }
+
+ .menu h1 {
+  float: left;
+  color: white;
+  margin-right: 250px;
+ }
+ 
+ .menu li {
+  float: right;
+ }
+ 
+ .menu li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+ }
+ 
+ .menu li a:hover {
+  background-color: lightskyblue;
+ }

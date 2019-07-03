@@ -1,20 +1,20 @@
-var app = angular.module('EmpApp', ['ui.bootstrap'])
-  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
-    $http({
+var app = angular.module('EmpApp')
+  .controller('EmployeeCtrl', [
+    '$scope', '$http',
+    function ($scope, $http) {
+      $http({
 
-      method: 'GET',
-      url: 'http://localhost:3002/api/employees'
+        method: 'GET',
+        url: '/api/employees'
 
-    }).then(function successCallback(response) {
+      }).then(function successCallback(response) {
 
-      console.log(response);
-      $scope.employees = response.data;
-      // $scope.currentPage = 1;
-      // $scope.pageSize = 4;
+        console.log(response);
+        $scope.employees = response.data;
 
-    }, function errorCallback(error) {
+      }, function errorCallback(error) {
 
-      alert("Error. Try Again!");
+        alert("Error. Try Again!");
 
-    });
-  }]);
+      });
+    }]);
