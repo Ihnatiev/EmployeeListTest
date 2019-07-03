@@ -1,8 +1,7 @@
-angular.module('helloWorldApp')
+angular.module('EmpApp')
 .controller('HomeCtrl', [
     '$scope',
     function($scope) {
-        console.log('Loaded.');
         $scope.message = 'I like Gulp!';
     }
 ]);

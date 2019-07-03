@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- <div id="mainWrapper">
+    <div id="fixedContent"></div>
+    <div id="wrapper">
+      <div id="routedContent"></div>
+    </div>
+  </div> -->
+  <div class="container wrapper">
+    <h1 class="text-center">AngularJS CRUD Operations</h1>
+    <nav class="navbar navbar-default">
+      <div class="navbar-header">
+        <div class="alert alert-default navbar-brand search-box">
+          <button class="btn btn-success" ng-click="open()">Add Employee</button>
+        </div>
+        <div class="alert alert-default input-group search-box">
+          <span class="input-group-btn">
+            <input type="text" class="form-control" placeholder="Search Employee" ng-model="search_query">
+          </span>
+          <button class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </nav>
+    <div class="col-md-6 col-md-offset-3">
+
+    <!-- Include form template which is used to insert data into database -->
+    <!-- <div ng-include src="'./employee-add/addForm.html'"></div> -->
+
+    <!-- Include form template which is used to edit and update data into database -->
+    <!-- <div ng-include src="'./employee-edit/editForm.html'"></div>
+    </div> -->
+
+    <div class="clearfix"></div>
+    <!-- Table to show employee detalis -->
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <tr>
+          <th></th>
+          <th class="text-center">Emp ID</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Active</th>
+          <th class="text-center">Department</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="employee in employees">
+          <td>
+            <button class="btn btn-info" ng-click="Info(detail)" title="View">
+              <span class="glyphicon glyphicon-view"></span>View</button>
+          </td>
+          <td class="text-center">{{employee.empID}}</td>
+          <td class="text-center">{{employee.empName}}</td>
+          <td class="text-center">{{employee.mpActive}}</td>
+          <td class="text-center">{{employee.empDepartment}}</td>
+          <td>
+            <button class="btn btn-warning" ng-click="editEmployee(employee)" title="Edit"><span
+                class="glyphicon glyphicon-edit"></span>Edit</button>
+          </td>
+          <td>
+            <button class="btn btn-danger" ng-click="deleteEmployee(employee)" title="Delete"><span
+                class="glyphicon glyphicon-trash"></span>Delete</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+</html>
