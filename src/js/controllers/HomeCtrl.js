@@ -3,6 +3,6 @@ angular.module('helloWorldApp')
     '$scope',
     function($scope) {
         console.log('Loaded.');
-        $scope.message = 'Hello World Test';
+        $scope.message = 'I like Gulp!';
     }
 ]);
