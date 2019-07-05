@@ -1,36 +1,65 @@
-header{
+header {
   width: 100%;
   height: auto;
   margin: 0 auto;
- }
- 
- /* Menu */
- .menu {
+}
+
+.menu {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: darkturquoise;
- }
+}
 
- .menu h1 {
+.menu h1 {
   float: left;
   color: white;
   margin-right: 250px;
- }
- 
- .menu li {
+}
+
+.menu li {
   float: right;
- }
- 
- .menu li a {
+}
+
+.menu li a {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
- }
- 
- .menu li a:hover {
+}
+
+.menu li a:hover {
   background-color: lightskyblue;
- }
+}
+
+.container {
+  padding-top: 10px;
+}
+#popUpDialog-bg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+#popUpDialog {
+  position: fixed;
+  width: 20%;
+  left: 50%;
+  margin-left: -125px;
+  margin-top: 5%;
+  padding: 15px;
+  border-radius: 5px;
+  background: white;
+}
+#popUpDialog .content {
+  margin-bottom: 15px;
+  text-align: center;
+}
+#popUpDialog .buttons-container {
+  width: 100%;
+  margin: 0 auto;
+}
