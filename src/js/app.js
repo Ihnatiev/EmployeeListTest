@@ -7,7 +7,7 @@ angular.module('EmpApp', ['ngRoute'])
                     controller: 'HomeCtrl'
                 })
                 .when('/employees', {
-                    templateUrl: 'views/employee-list.html',
+                    templateUrl: 'views/empList.html',
                     controller: 'EmployeeCtrl'
                 });
         }
