@@ -16,18 +16,15 @@ var app = angular.module('EmpApp')
 
         alert("Error. Try Again!");
 
-      });
+      }
+      );
 
-    }]);
+      $scope.showDialog = function () {
+        $scope.showPopUpDialog = true;
+      }
 
-app.controller('DialogCtrl', function ($scope) {
-
-  $scope.UpDialog = function () {
-    $scope.showPopUpDialog = true;
-    console.log('pressed');
-  }
-
-}).directive('popUpDialog', function () {
+    }])
+  .directive('popUpDialog', function () {
     return {
       restrict: 'E', // directive element
       scope: false,
