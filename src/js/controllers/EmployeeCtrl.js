@@ -1,7 +1,7 @@
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', [
-    '$scope', '$http',
+  .controller('EmployeeCtrl', ['$scope', '$http',
     function ($scope, $http) {
+      //Get all employees
       $http({
 
         method: 'GET',
@@ -9,26 +9,48 @@ var app = angular.module('EmpApp')
 
       }).then(function successCallback(response) {
 
-        console.log(response);
         $scope.employees = response.data;
 
       }, function errorCallback(error) {
 
         alert("Error. Try Again!");
 
-      }
-      );
+      });
 
-      $scope.showDialog = function () {
+      //Delete employee
+      $scope.deleteEmployee = function (employee) {
+
+        $http({
+
+          method: 'DELETE',
+          url: 'http://localhost:3002/api/employees/' + employee.id,
+
+        }).then(function successCallback(response) {
+
+          var index = $scope.employees.indexOf(employee);
+          $scope.employees.splice(index, 1);
+          alert("Employee successfully deleted");
+
+        }, function errorCallback(error) {
+
+          alert("Error while deleting employee. Try Again!");
+
+        });
+
+      };
+
+      $scope.addEmployee = function () {
         $scope.showPopUpDialog = true;
       }
 
     }])
-  .directive('popUpDialog', function () {
+  .directive('addEmployeeDialog', function () {
+
     return {
       restrict: 'E', // directive element
       scope: false,
-      templateUrl: 'views/popUpDialog.html',
+      templateUrl: 'views/addEmployee.html',
+
       controller: function ($scope) {
         $scope.showPopUpDialog = false;
         $scope.closePopUpDialog = function () {
