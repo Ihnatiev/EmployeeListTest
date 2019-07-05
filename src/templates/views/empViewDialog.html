@@ -1,0 +1,16 @@
+<div id="popUpDialog-bg" ng-show="showEmpViewDialog">
+  <div id="popUpDialog">
+    <div class="content">
+      <div class="modal-header">
+        <h3>View an employee</h3>
+      </div>
+      <div class="modal-body"  ng-repeat="employee in employees">
+          <div align="left">ID: {{employee.empID}}</div>
+          <div align="left">Name: {{employee.empName}}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="closeEmpViewDialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

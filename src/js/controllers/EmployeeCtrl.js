@@ -1,7 +1,8 @@
+'use strict';
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http',
+  .controller('EmployeeCtrl', [
+    '$scope', '$http',
     function ($scope, $http) {
-      //Get all employees
       $http({
 
         method: 'GET',
@@ -9,13 +10,15 @@ var app = angular.module('EmpApp')
 
       }).then(function successCallback(response) {
 
+        console.log(response);
         $scope.employees = response.data;
 
       }, function errorCallback(error) {
 
         alert("Error. Try Again!");
 
-      });
+      }
+      );
 
       //Delete employee
       $scope.deleteEmployee = function (employee) {
@@ -43,18 +46,50 @@ var app = angular.module('EmpApp')
         $scope.showPopUpDialog = true;
       }
 
-    }])
-  .directive('addEmployeeDialog', function () {
+      $scope.editEmployee = function () {
+        $scope.showEmpEditDialog = true;
+      }
 
+      $scope.viewEmployee = function () {
+        $scope.showEmpViewDialog = true;
+      }
+
+    }])
+  .directive('popUpDialog', function () {
     return {
       restrict: 'E', // directive element
       scope: false,
-      templateUrl: 'views/addEmployee.html',
-
+      templateUrl: 'views/popUpDialog.html',
       controller: function ($scope) {
         $scope.showPopUpDialog = false;
         $scope.closePopUpDialog = function () {
           $scope.showPopUpDialog = false;
+        }
+      }
+    }
+  })
+  .directive('empEditDialog', function () {
+    return {
+      restrict: 'E',
+      scope: false,
+      templateUrl: 'views/empEditDialog.html',
+      controller: function ($scope) {
+        $scope.showEmpEditDialog = false;
+        $scope.closeEmpEditDialog = function () {
+          $scope.showEmpEditDialog = false;
+        }
+      }
+    }
+  })
+  .directive('empViewDialog', function () {
+    return {
+      restrict: 'E',
+      scope: false,
+      templateUrl: 'views/empViewDialog.html',
+      controller: function ($scope) {
+        $scope.showEmpViewDialog = false;
+        $scope.closeEmpViewDialog = function () {
+          $scope.showEmpViewDialog = false;
         }
       }
     }

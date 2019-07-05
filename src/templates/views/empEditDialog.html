@@ -1,8 +1,8 @@
-<div id="popUpDialog-bg" ng-show="addEmployeeDialog">
+<div id="popUpDialog-bg" ng-show="showEmpEditDialog">
   <div id="popUpDialog">
     <div class="content">
       <div class="modal-header">
-        <h3>Add an employee</h3>
+        <h3>Edit an employee</h3>
       </div>
       <div class="modal-body">
         <input type="text" name="emp_name" class="form-control" placeholder="Enter Employee Name" />
@@ -21,7 +21,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary">OK</button>
-        <button class="btn btn-warning" ng-click="closeAddEmployeeDialog()">Cancel</button>
+        <button class="btn btn-warning" ng-click="closeEmpEditDialog()">Cancel</button>
       </div>
     </div>
   </div>

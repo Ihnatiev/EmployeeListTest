@@ -4,7 +4,7 @@
    </div>
    <nav class="navbar navbar-default">
      <div class="navbar-header">
-       <div class="alert alert-default navbar-brand search-box">
+       <div class="alert alert-default navbar-brand">
          <button class="btn btn-success" ng-click="addEmployee()">Add an employee</button>
        </div>
        <div class="alert alert-default input-group search-box">
@@ -31,15 +31,15 @@
          </tr>
          <tr ng-repeat="employee in employees">
            <td>
-             <button class="btn btn-info" ng-click="Info(detail)" title="View">
+             <button class="btn btn-info" ng-click="viewEmployee()" title="View">
                <span class="glyphicon glyphicon-view"></span>View</button>
            </td>
            <td class="text-center">{{employee.empID}}</td>
            <td class="text-center">{{employee.empName}}</td>
            <td class="text-center">{{employee.empActive}}</td>
-           <td class="text-center">{{employee.empDepartment}}</td>
+           <td class="text-center">{{employee.dpName}}</td>
            <td>
-             <button class="btn btn-warning" ng-click="editEmployee(employee)" title="Edit"><span
+             <button class="btn btn-warning" ng-click="editEmployee()" title="Edit"><span
                  class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
            <td>
@@ -50,5 +50,7 @@
        </table>
      </div>
    </div>
-   <add-employee-dialog></add-employee-dialog>
+   <pop-up-dialog></pop-up-dialog>
+   <emp-edit-dialog></emp-edit-dialog>
+   <emp-view-dialog></emp-view-dialog>
  </div>
