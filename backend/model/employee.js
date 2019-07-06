@@ -1,4 +1,4 @@
-const sql = require('../db.js');
+const sql = require('../app.js');
 
 //Employee object constructor
 const Employee = function (emp) {

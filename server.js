@@ -21,10 +21,10 @@ app.use((req, res, next) => {
   next();
 });
 
-  app.listen(port, () => {
-    console.log('Server started on the port ' + port);
-  });
+app.listen(port, () => {
+  console.log('Server started on the port ' + port);
+});
 
-  //connect to DB
-  const routes = require('./backend/routes/employees');
-  routes(app);
+//connect to DB
+const routes = require('./backend/routes/employees');
+routes(app);
