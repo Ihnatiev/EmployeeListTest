@@ -26,5 +26,5 @@ app.use((req, res, next) => {
   });
 
   //connect to DB
-  const routes = require('./server/routes/employees');
+  const routes = require('./backend/routes/employees');
   routes(app);
