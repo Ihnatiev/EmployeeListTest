@@ -10,7 +10,6 @@ var app = angular.module('EmpApp')
 
       }).then(function successCallback(response) {
 
-        console.log(response);
         $scope.employees = response.data;
 
       }, function errorCallback(error) {
@@ -20,9 +19,25 @@ var app = angular.module('EmpApp')
       }
       );
 
+      // $http({
+
+      //   method: 'GET',
+      //   url: 'http://localhost:3002/api/employees/' + employeeId
+
+      // }).then(function successCallback(response) {
+
+      //   $scope.employees = response.data;
+      //   console.log(response);
+
+      // }, function errorCallback(error) {
+
+      //   alert("Error. Try Again!");
+
+      // }
+      // );
+
       //Delete employee
       $scope.deleteEmployee = function (employee) {
-
         $http({
 
           method: 'DELETE',
@@ -39,7 +54,6 @@ var app = angular.module('EmpApp')
           alert("Error while deleting employee. Try Again!");
 
         });
-
       };
 
       $scope.addEmployee = function () {
