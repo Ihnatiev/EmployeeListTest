@@ -26,5 +26,5 @@ app.listen(port, () => {
 });
 
 //connect to DB
-const routes = require('./backend/routes/employees');
+const routes = require('./backend/routes/employee.routes');
 routes(app);
