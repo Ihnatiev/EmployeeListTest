@@ -25,6 +25,5 @@ app.listen(port, () => {
   console.log('Server started on the port ' + port);
 });
 
-//connect to DB
 const routes = require('./backend/routes/employee.routes');
 routes(app);

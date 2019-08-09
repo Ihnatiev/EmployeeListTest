@@ -37,6 +37,7 @@ header {
 .container {
   padding-top: 10px;
 }
+
 #popUpDialog-bg {
   position: fixed;
   left: 0;
@@ -45,6 +46,7 @@ header {
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
 }
+
 #popUpDialog {
   position: fixed;
   width: 20%;
@@ -55,11 +57,19 @@ header {
   border-radius: 5px;
   background: white;
 }
+
 #popUpDialog .content {
   margin-bottom: 15px;
   text-align: center;
 }
+
 #popUpDialog .buttons-container {
   width: 100%;
   margin: 0 auto;
+}
+
+.homer {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
 }

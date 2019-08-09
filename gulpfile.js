@@ -9,7 +9,7 @@ const styles = require('./styles');
 
 var devMode = false;
 
-gulp.task('css', function() {
+gulp.task('css', function () {
     gulp.src(styles)
         .pipe(concat('main.css'))
         .pipe(gulp.dest('dist/css'))
@@ -18,7 +18,7 @@ gulp.task('css', function() {
         }));
 });
 
-gulp.task('js', function() {
+gulp.task('js', function () {
     gulp.src(scripts)
         .pipe(concat('scripts.js'))
         .pipe(gulp.dest('./dist/js'))
@@ -27,7 +27,7 @@ gulp.task('js', function() {
         }));
 });
 
-gulp.task('html', function() {
+gulp.task('html', function () {
     return gulp.src('./src/templates/**/*.html')
         .pipe(gulp.dest('./dist/'))
         .pipe(browserSync.reload({
@@ -35,11 +35,16 @@ gulp.task('html', function() {
         }));
 });
 
-gulp.task('build', function() {
-    gulp.start(['css', 'js', 'html'])
+gulp.task('img', function () {
+    return gulp.src('src/img/*.png')
+        .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('browser-sync', function() {
+gulp.task('build', function () {
+    gulp.start(['css', 'js', 'html', 'img'])
+});
+
+gulp.task('browser-sync', function () {
     browserSync.init(null, {
         open: false,
         server: {
@@ -48,7 +53,7 @@ gulp.task('browser-sync', function() {
     });
 });
 
-gulp.task('start', function() {
+gulp.task('start', function () {
     devMode = true;
     gulp.start(['build', 'browser-sync']);
     gulp.watch(['./src/css/**/*.css'], ['css']);

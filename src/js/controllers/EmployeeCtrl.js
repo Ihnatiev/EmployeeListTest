@@ -1,83 +1,84 @@
 'use strict';
-var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', [
-    '$scope', '$http',
-    function ($scope, $http) {
-      $http({
 
+var app = angular.module('EmpApp')
+  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    $scope.dpName = {
+      model: null,
+      availableDepartments: [
+        {id: '1', name: 'HR'},
+        {id: '2', name: 'Tech'},
+        {id: '3', name: 'Finance'}
+      ]
+    };
+
+    $scope.displayEmployees = function () {
+      $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees'
-
       }).then(function successCallback(response) {
-
         $scope.employees = response.data;
-
-      }, function errorCallback(error) {
-
+      }, function errorCallback() {
         alert("Error. Try Again!");
-
       }
       );
+    };
 
-      // $http({
+    $scope.addEmployee = function () {
+      $http({
+        method: 'POST',
+        url: 'http://localhost:3002/api/employees',
+        data: {
+          'empName': $scope.empName,
+          'empActive': $scope.empActive,
+          'dpID': $scope.dpID
+        }
+      }).then(function successCallback() {
+        alert("Employee added successfully");
+        $scope.closeEmpAddDialog();
+        $scope.displayEmployees();
+      }, function errorCallback() {
+        alert("Error. Try Again!");
+      });
+    };
 
-      //   method: 'GET',
-      //   url: 'http://localhost:3002/api/employees/' + employeeId
-
-      // }).then(function successCallback(response) {
-
-      //   $scope.employees = response.data;
-      //   console.log(response);
-
-      // }, function errorCallback(error) {
-
-      //   alert("Error. Try Again!");
-
-      // }
-      // );
-
-      //Delete employee
-      $scope.deleteEmployee = function (employee) {
+    $scope.deleteEmployee = function (employeeId) {
+      if (confirm("Are you sure you want to delete this employee?")) {
         $http({
-
           method: 'DELETE',
-          url: 'http://localhost:3002/api/employees/' + employee.id,
-
-        }).then(function successCallback(response) {
-
-          var index = $scope.employees.indexOf(employee);
-          $scope.employees.splice(index, 1);
-          alert("Employee successfully deleted");
-
-        }, function errorCallback(error) {
-
-          alert("Error while deleting employee. Try Again!");
-
+          url: 'http://localhost:3002/api/employees/' + employeeId
+        }).then(function successCallback() {
+          alert("Deleted");
+          $scope.displayEmployees();
         });
-      };
-
-      $scope.addEmployee = function () {
-        $scope.showPopUpDialog = true;
       }
-
-      $scope.editEmployee = function () {
-        $scope.showEmpEditDialog = true;
+      else {
+        return false;
       }
+    };
 
-      $scope.viewEmployee = function () {
-        $scope.showEmpViewDialog = true;
-      }
+    $scope.addBtn = function () {
+      $scope.showEmpAddDialog = true;
+    };
 
-    }])
+    $scope.editBtn = function () {
+      $scope.showEmpEditDialog = true;
+    };
+
+    $scope.viewBtn = function () {
+      $scope.showEmpViewDialog = true;
+    };
+
+  }])
   .directive('popUpDialog', function () {
     return {
       restrict: 'E', // directive element
       scope: false,
-      templateUrl: 'views/popUpDialog.html',
+      templateUrl: 'views/empAddDialog.html',
       controller: function ($scope) {
-        $scope.showPopUpDialog = false;
-        $scope.closePopUpDialog = function () {
-          $scope.showPopUpDialog = false;
+        $scope.showEmpAddDialog = false;
+        $scope.closeEmpAddDialog = function () {
+          $scope.showEmpAddDialog = false;
         }
       }
     }
