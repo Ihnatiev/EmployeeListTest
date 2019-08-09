@@ -12,7 +12,7 @@ var app = angular.module('EmpApp')
       ]
     };
 
-    $scope.displayEmployees = function () {
+    $scope.getAllEmployees = function () {
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees'
@@ -24,7 +24,20 @@ var app = angular.module('EmpApp')
       );
     };
 
-    $scope.addEmployee = function () {
+    $scope.getEmployeeById = function (employeeId) {
+      $scope.showEmpViewDialog = true;
+      $http({
+        method: 'GET',
+        url: 'http://localhost:3002/api/employees/' + employeeId
+      }).then(function successCallback(response) {
+        $scope.readAnEmployee = response.data;
+      }, function errorCallback() {
+        alert("Error. Try Again!");
+      }
+      );
+    };
+
+    $scope.createEmployee = function () {
       $http({
         method: 'POST',
         url: 'http://localhost:3002/api/employees',
@@ -63,10 +76,6 @@ var app = angular.module('EmpApp')
 
     $scope.editBtn = function () {
       $scope.showEmpEditDialog = true;
-    };
-
-    $scope.viewBtn = function () {
-      $scope.showEmpViewDialog = true;
     };
 
   }])

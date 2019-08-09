@@ -1,13 +1,13 @@
  <div class="container wrapper" ng-controller="EmployeeCtrl">
    <div>
-     <h1 class="text-center">AngularJS CRUD Operations</h1>
+     <i>
+       <h1 class="text-center">AngularJS CRUD Operations</h1>
+     </i>
    </div>
    <nav class="navbar navbar-default">
+     <button class="btn btn-success" ng-click="addBtn()">Add new employee</button>
      <div class="navbar-header">
-       <div class="alert alert-default navbar-brand">
-         <button class="btn btn-success" ng-click="addBtn()">Add new employee</button>
-       </div>
-       <div class="alert alert-default input-group search-box">
+       <div class="input-group search-box">
          <span class="input-group-btn">
            <input type="text" class="form-control" placeholder="Search Employee" ng-model="search_query">
          </span>
@@ -15,35 +15,35 @@
        </div>
      </div>
    </nav>
-   <div class="col-md-12 col-md-offset-3" ng-init="displayEmployees()">
 
+   <div class="col-md-12 col-md-offset-3" ng-init="getAllEmployees()">
      <div class="clearfix"></div>
      <div class="table-responsive">
        <table class="table table-hover">
          <tr>
            <th></th>
-           <th class="text-center" style="width:15%">ID</th>
-           <th class="text-center" style="width:25%">Name</th>
+           <th></th>
+           <th class="text-center" style="width:20%">ID</th>
+           <th class="text-center" style="width:20%">Name</th>
            <th class="text-center" style="width:25%">Active</th>
            <th class="text-center" style="width:25%">Department</th>
-           <th style="width:25%"></th>
-           <th style="width:25%"></th>
+           <th></th>
          </tr>
-         <tr ng-repeat="employee in employees">
+         <tr ng-repeat="emp in employees">
            <td>
-             <button class="btn btn-info" ng-click="viewBtn()" title="View">
+             <button class="btn btn-info" ng-click="getEmployeeById()" title="View">
                <span class="glyphicon glyphicon-view"></span>View</button>
            </td>
-           <td class="text-center">{{employee.empID}}</td>
-           <td class="text-center">{{employee.empName}}</td>
-           <td class="text-center">{{employee.empActive}}</td>
-           <td class="text-center">{{employee.dpName}}</td>
            <td>
-             <button class="btn btn-warning" ng-click="editBtn(employee.empName, employee.empActive, employee.dpName)" title="Edit"><span
-                 class="glyphicon glyphicon-edit"></span>Edit</button>
+             <button class="btn btn-warning" ng-click="editBtn(emp.empName, emp.empActive, emp.dpName)"
+               title="Edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
+           <td class="text-center">{{emp.empID}}</td>
+           <td class="text-center">{{emp.empName}}</td>
+           <td class="text-center">{{emp.empActive}}</td>
+           <td class="text-center">{{emp.dpName}}</td>
            <td>
-             <button class="btn btn-danger" ng-click="deleteEmployee(employee.empID)" title="Delete"><span
+             <button class="btn btn-danger" ng-click="deleteEmployee(emp.empID)" title="Delete"><span
                  class="glyphicon glyphicon-trash"></span>Delete</button>
            </td>
          </tr>
