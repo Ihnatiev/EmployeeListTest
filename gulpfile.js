@@ -36,7 +36,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('img', function () {
-    return gulp.src('src/img/*.png')
+    return gulp.src('src/img/**')
         .pipe(gulp.dest('dist/img'));
 });
 

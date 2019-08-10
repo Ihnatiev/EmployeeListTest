@@ -12,6 +12,10 @@ var app = angular.module('EmpApp')
       ]
     };
 
+    $scope.empActive = {
+      model: false
+    };
+
     $scope.getAllEmployees = function () {
       $http({
         method: 'GET',
@@ -43,13 +47,33 @@ var app = angular.module('EmpApp')
         url: 'http://localhost:3002/api/employees',
         data: {
           'empName': $scope.empName,
-          'empActive': $scope.empActive,
-          'dpID': $scope.dpID
+          'empActive': $scope.empActive.model,
+          'empDepartment': $scope.dpName.model
         }
-      }).then(function successCallback() {
+      }).then(function successCallback(data) {
+        $scope.employees.push(data);
         alert("Employee added successfully");
         $scope.closeEmpAddDialog();
-        $scope.displayEmployees();
+        $scope.getAllEmployees();
+      }, function errorCallback() {
+        alert("Error. Try Again!");
+      });
+    };
+
+    $scope.editEmployee = function (employeeId) {
+      $http({
+        method: 'PUT',
+        url: 'http://localhost:3002/api/employees/' + employeeId,
+        data: {
+          'empName': $scope.empName,
+          'empActive': $scope.empActive.model,
+          'empDepartment': $scope.dpName.model
+        }
+      }).then(function successCallback(data) {
+        $scope.employees.push(data);
+        alert("Employee edited successfully");
+        $scope.closeEmpEditDialog();
+        $scope.getAllEmployees();
       }, function errorCallback() {
         alert("Error. Try Again!");
       });
@@ -62,7 +86,7 @@ var app = angular.module('EmpApp')
           url: 'http://localhost:3002/api/employees/' + employeeId
         }).then(function successCallback() {
           alert("Deleted");
-          $scope.displayEmployees();
+          $scope.getAllEmployees();
         });
       }
       else {

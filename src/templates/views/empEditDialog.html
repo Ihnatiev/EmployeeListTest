@@ -5,22 +5,21 @@
         <h3>Edit an employee</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="emp_name" class="form-control" placeholder="Enter Employee Name" />
+        <input type="text" name="emp_name" class="form-control" placeholder="Enter Employee Name" ng-model="empName" />
         <label for="isActive">isActive:</label>
         <label class="radio-inline gender">
-          <input type="radio" name="isActive" value="isActive">
+          <input type="radio" ng-model="empActive.model" value="{{ 0 || 1 }}">
         </label>
         <div>
-          <select name="num" autofocus class="form-control">
+          <select name="num" class="form-control" ng-model="dpName.model">
             <option value="">Department:</option>
-            <option value="1">HR</option>
-            <option value="2">Tech</option>
-            <option value="3">Finance</option>
+            <option ng-repeat="department in dpName.availableDepartments" value="{{department.id}}">{{department.name}}
+            </option>
           </select>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary">OK</button>
+        <button class="btn btn-primary" value="Submit" ng-click="editEmployee()">Save</button>
         <button class="btn btn-warning" ng-click="closeEmpEditDialog()">Cancel</button>
       </div>
     </div>

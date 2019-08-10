@@ -8,10 +8,10 @@
         <input type="text" name="emp_name" class="form-control" placeholder="Enter Employee Name" ng-model="empName"/>
         <label for="isActive">isActive:</label>
         <label class="radio-inline gender">
-          <input type="radio" name="isActive" value="isActive" ng-model="empActive">
+          <input type="radio" ng-model="empActive.model" value="{{ 0 || 1 }}">
         </label>
         <div>
-          <select name="num" autofocus class="form-control" ng-model="dpName.model">
+          <select name="num" class="form-control" ng-model="dpName.model">
             <option value="">Department:</option>
             <option ng-repeat="department in dpName.availableDepartments" value="{{department.id}}">{{department.name}}</option>
           </select>

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="EmpApp">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="https://das.nh.gov/EmployeePortal/graphics/employees-app-icon.png" type="image/x-icon">
+
 <head>
     <title>Employee List App</title>
     <link href="css/main.css" rel="stylesheet">
@@ -9,15 +11,13 @@
 <body>
     <ul class='menu'>
         <h1>EmployeeListApp</h1>
+        <!-- <li><a href="">Signup</a></li>
+        <li><a href="">Logout</a></li>
+        <li><a href="">Login</a></li> -->
         <li><a href="#!employees">Employees</a></li>
         <li><a href="#/!">Home</a></li>
-        <!-- <li><a href="">Login</a></li>
-        <li><a href="">Signup</a></li>
-        <li><a href="">Logout</a></li> -->
     </ul>
-
     <ng-view class="view ng-scope"></ng-view>
-
 </body>
 <script src="js/scripts.js"></script>
 
