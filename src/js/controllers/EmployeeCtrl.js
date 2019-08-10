@@ -102,13 +102,10 @@ var app = angular.module('EmpApp')
       $scope.showEmpEditDialog = true;
     };
 
-    $scope.search_query = function () {  
-      var orderBy = $filter('orderBy');  
-      $scope.order = function (Btn) {  
-          $scope.employees = orderBy($scope.employees, Btn);  
-      };  
-    }; 
-    
+    $scope.searchEmployee = function () {
+      $scope.searchEmpName = $scope.searchName;
+    };
+
   }])
   .directive('popUpDialog', function () {
     return {
