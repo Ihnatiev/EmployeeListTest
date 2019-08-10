@@ -6,9 +6,9 @@ var app = angular.module('EmpApp')
     $scope.dpName = {
       model: null,
       availableDepartments: [
-        {id: '1', name: 'HR'},
-        {id: '2', name: 'Tech'},
-        {id: '3', name: 'Finance'}
+        { id: '1', name: 'HR' },
+        { id: '2', name: 'Tech' },
+        { id: '3', name: 'Finance' }
       ]
     };
 
