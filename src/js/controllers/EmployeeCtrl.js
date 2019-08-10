@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http, $filter) {
 
     $scope.dpName = {
       model: null,
@@ -102,6 +102,13 @@ var app = angular.module('EmpApp')
       $scope.showEmpEditDialog = true;
     };
 
+    $scope.search_query = function () {  
+      var orderBy = $filter('orderBy');  
+      $scope.order = function (Btn) {  
+          $scope.employees = orderBy($scope.employees, Btn);  
+      };  
+    }; 
+    
   }])
   .directive('popUpDialog', function () {
     return {

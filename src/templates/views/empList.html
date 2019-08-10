@@ -9,9 +9,9 @@
      <div class="navbar-header">
        <div class="input-group search-box">
          <span class="input-group-btn">
-           <input type="text" class="form-control" placeholder="Search Employee" ng-model="search_query">
+           <input type="text" class="form-control" placeholder="Search Employee">
          </span>
-         <button class="btn btn-primary">Search</button>
+         <button class="btn btn-primary" type="submit" ng-click="search_query()" data-dismiss="modal">Search</button>
        </div>
      </div>
    </nav>
@@ -38,7 +38,9 @@
              <button class="btn btn-warning" ng-click="editBtn()"
                title="Edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
-           <td class="text-center">{{emp.empID}}</td>
+           <td class="text-center">{{$index + 1}}</td>
+           <td style="display:none">{{emp.empID}}</td>
+           <!-- <td class="text-center">{{emp.empID}}</td> -->
            <td class="text-center">{{emp.empName}}</td>
            <td class="text-center">{{emp.empActive}}</td>
            <td class="text-center">{{emp.dpName}}</td>
