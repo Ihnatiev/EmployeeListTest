@@ -1,14 +1,13 @@
 module.exports = function (app) {
   const todoList = require('../controllers/employee.controllers');
 
-  // todoList Routes
   app.route('/api/employees')
     .get(todoList.list_all_employees)
-    .post(todoList.create_an_employee);
+    .post(todoList.create_employee);
 
   app.route('/api/employees/:employeeId')
-    .get(todoList.read_an_employee)
-    .put(todoList.update_an_employee)
-    .delete(todoList.delete_an_employee);
+    .get(todoList.read_employee)
+    .put(todoList.update_employee)
+    .delete(todoList.delete_employee);
 
 };

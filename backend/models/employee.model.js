@@ -1,13 +1,12 @@
 const sql = require('../app.js');
 
-//Employee object constructor
-const Employee = function (emp) {
+const Task = function (emp) {
   this.empName = emp.empName;
   this.empActive = emp.empActive;
   this.empDepartment = emp.empDepartment;
 };
 
-Employee.createEmployee = function createEmployee(newEmployee, result) {
+Task.createEmployee = function createEmployee(newEmployee, result) {
   sql.query(
     "INSERT INTO Employee SET ?",
     newEmployee, function (err, res) {
@@ -20,7 +19,7 @@ Employee.createEmployee = function createEmployee(newEmployee, result) {
     });
 };
 
-Employee.getAllEmployees = function getAllEmployees(result) {
+Task.getAllEmployees = function getAllEmployees(result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -37,7 +36,7 @@ Employee.getAllEmployees = function getAllEmployees(result) {
     });
 };
 
-Employee.getEmployeeById = function createUser(employeeId, result) {
+Task.getEmployeeById = function getEmployee(employeeId, result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -54,7 +53,7 @@ Employee.getEmployeeById = function createUser(employeeId, result) {
     });
 };
 
-Employee.updateById = function (id, employee, result) {
+Task.updateEmployeeById = function updateEmployee(id, employee, result) {
   sql.query(
     "UPDATE Employee SET ? where empID=?",
     [employee, id], function (err, res) {
@@ -66,7 +65,7 @@ Employee.updateById = function (id, employee, result) {
     });
 };
 
-Employee.remove = function (id, result) {
+Task.removeEmployeeById = function removeEmployee(id, result) {
   sql.query(
     "DELETE FROM Employee WHERE empID = ?",
     [id], function (err, res) {
@@ -78,5 +77,4 @@ Employee.remove = function (id, result) {
     });
 };
 
-
-module.exports = Employee;
+module.exports = Task;

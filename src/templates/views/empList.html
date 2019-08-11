@@ -35,8 +35,8 @@
                <span class="glyphicon glyphicon-view"></span>View</button>
            </td>
            <td>
-             <button class="btn btn-warning" ng-click="editBtn()"
-               title="Edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
+             <button class="btn btn-warning" ng-click="editBtn()" title="Edit"><span
+                 class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
            <!-- <td class="text-center">{{$index + 1}}</td>
            <td style="display:none">{{emp.empID}}</td> -->
@@ -49,6 +49,27 @@
                  class="glyphicon glyphicon-trash"></span>Delete</button>
            </td>
          </tr>
+         <tfoot>
+           <tr>
+             <td align="center" colspan="6   ">
+               <span class="form-group pull-left page-size form-inline">
+                 <select id="ddlPageSize" class="form-control control-color" ng-model="pageSizeSelected"
+                   ng-change="changePageSize()">
+                   <option value="5">5</option>
+                   <option value="10">10</option>
+                   <option value="25">25</option>
+                   <option value="50">50</option>
+                 </select>
+               </span>
+               <div class="pull-right">
+                 <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
+                   direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination"
+                   boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                 <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
+               </div>
+             </td>
+           </tr>
+         </tfoot>
        </table>
      </div>
    </div>

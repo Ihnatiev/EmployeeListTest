@@ -94,6 +94,15 @@ var app = angular.module('EmpApp')
       }
     };
 
+    // $scope.pageChanged = function () {
+    //   $scope.getAllEmployees();
+    // };
+
+    // $scope.changePageSize = function () {
+    //   $scope.pageIndex = 1;
+    //   $scope.getAllEmployees();
+    // };
+
     $scope.addBtn = function () {
       $scope.showEmpAddDialog = true;
     };
