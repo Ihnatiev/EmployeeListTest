@@ -89,7 +89,7 @@ var app = angular.module('EmpApp')
           method: 'DELETE',
           url: 'http://localhost:3002/api/employees/' + employeeId
         }).then(function successCallback() {
-          alert("Deleted");
+          alert("Employee deleted");
           $scope.getAllEmployees();
         });
       }
