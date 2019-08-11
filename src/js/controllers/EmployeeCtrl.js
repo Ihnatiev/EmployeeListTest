@@ -68,13 +68,12 @@ var app = angular.module('EmpApp')
         url: 'http://localhost:3002/api/employees/' + employeeId,
         data: {
           'empName': $scope.empName,
-          'empActive': $scope.empAcive,
-          'empDepartment': $scope.dpName,
-          'empID': employeeId
+          'empActive': $scope.empAcive.model,
+          'empDepartment': $scope.dpName.model
         },
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(function successCallback(data) {
-        $scope.employeeDetails.push(data);
+        $scope.employees.push(data);
         alert("Employee editd successfully");
         $scope.closeEmpEditDialog();
         $scope.getAllEmployees();
