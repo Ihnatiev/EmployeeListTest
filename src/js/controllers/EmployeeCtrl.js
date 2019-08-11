@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http, $filter) {
+  .controller('EmployeeCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
 
     $scope.dpName = {
       model: null,
@@ -20,10 +20,11 @@ var app = angular.module('EmpApp')
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees'
-      }).then(function successCallback(response) {
-        $scope.employees = response.data;
+      }).then(function successCallback(res) {
+        if (res.status == 200)
+          $scope.employees = res.data;
       }, function errorCallback() {
-        alert("Error. Try Again!");
+        alert("Error. Server is not responding");
       }
       );
     };
@@ -33,10 +34,10 @@ var app = angular.module('EmpApp')
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees/' + employeeId
-      }).then(function successCallback(response) {
-        $scope.readAnEmployee = response.data;
+      }).then(function successCallback(res) {
+        $scope.employeeDetails = res.data;
       }, function errorCallback() {
-        alert("Error. Try Again!");
+        alert("Error");
       }
       );
     };
@@ -49,14 +50,15 @@ var app = angular.module('EmpApp')
           'empName': $scope.empName,
           'empActive': $scope.empActive.model,
           'empDepartment': $scope.dpName.model
-        }
+        },
+        headers: { 'Content-Type': 'application/JSON' }
       }).then(function successCallback(data) {
         $scope.employees.push(data);
         alert("Employee added successfully");
         $scope.closeEmpAddDialog();
         $scope.getAllEmployees();
-      }, function errorCallback() {
-        alert("Error. Try Again!");
+      }, function errorCallback(error) {
+        alert('Unable to create an employee: ' + error.message);
       });
     };
 
@@ -66,16 +68,18 @@ var app = angular.module('EmpApp')
         url: 'http://localhost:3002/api/employees/' + employeeId,
         data: {
           'empName': $scope.empName,
-          'empActive': $scope.empActive.model,
-          'empDepartment': $scope.dpName.model
-        }
+          'empActive': $scope.empAcive,
+          'empDepartment': $scope.dpName,
+          'empID': employeeId
+        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       }).then(function successCallback(data) {
-        $scope.employees.push(data);
-        alert("Employee edited successfully");
+        $scope.employeeDetails.push(data);
+        alert("Employee editd successfully");
         $scope.closeEmpEditDialog();
         $scope.getAllEmployees();
-      }, function errorCallback() {
-        alert("Error. Try Again!");
+      }, function errorCallback(error) {
+        alert('Unable to update an employee: ' + error.message);
       });
     };
 

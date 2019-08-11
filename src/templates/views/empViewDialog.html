@@ -4,10 +4,10 @@
       <div class="modal-header">
         <h3>View an employee</h3>
       </div>
-      <div class="modal-body"  ng-repeat="emp in employees" for="{{emp}}">
-          <div style="text-align: left">Name: {{emp.empName}}</div>
-          <div style="text-align: left">Active: {{emp.empActive}}</div>
-          <div style="text-align: left">Department: {{emp.dpName}}</div>
+      <div class="modal-body"  ng-repeat="emp in employeeDetails">
+          <div style="text-align: left"><b>Name: </b>{{emp.empName}}</div>
+          <div style="text-align: left"><b>Active: </b>{{emp.empActive}}</div>
+          <div style="text-align: left"><b>Department: </b>{{emp.dpName}}</div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-warning" ng-click="closeEmpViewDialog()">Cancel</button>

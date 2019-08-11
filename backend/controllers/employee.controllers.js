@@ -11,7 +11,7 @@ exports.list_all_employees = function (req, res, next) {
 };
 
 exports.create_employee = function (req, res, next) {
-  var new_employee = new Employee(req.body);
+  var new_employee = new Task(req.body);
   Task.createEmployee(new_employee, function (err, employee) {
     if (err) {
       res.send(err);
@@ -30,7 +30,7 @@ exports.read_employee = function (req, res) {
 };
 
 exports.update_employee = function (req, res) {
-  Task.updateEmployeeById(req.params.employeeId, new Employee(req.body), function (err, employee) {
+  Task.updateEmployeeById(req.params.employeeId, new Task(req.body), function (err, employee) {
     if (err)
       res.send(err);
     res.json(employee);
