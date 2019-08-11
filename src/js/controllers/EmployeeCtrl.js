@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.dpName = {
       model: null,
@@ -61,7 +61,7 @@ var app = angular.module('EmpApp')
         alert('Unable to create an employee: ' + error.message);
       });
     };
-
+///////////////////////////////////////////////////////////////////////////////////////////////
     $scope.editEmployee = function (employeeId) {
       $http({
         method: 'PUT',
@@ -82,7 +82,7 @@ var app = angular.module('EmpApp')
         alert('Unable to update an employee: ' + error.message);
       });
     };
-
+////////////////////////////////////////////////////////////////////////////////////////////////
     $scope.deleteEmployee = function (employeeId) {
       if (confirm("Are you sure you want to delete this employee?")) {
         $http({
