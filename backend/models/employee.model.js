@@ -1,14 +1,13 @@
 const sql = require('../app.js');
 
-const Task = function (emp) {
+const Employee = function (emp) {
   this.empName = emp.empName;
   this.empActive = emp.empActive;
   this.empDepartment = emp.empDepartment;
 };
 
-Task.createEmployee = function createEmployee(newEmployee, result) {
-  sql.query(
-    "INSERT INTO Employee SET ?",
+Employee.createEmployee = function createEmployee(newEmployee, result) {
+  sql.query("INSERT INTO Employee SET ?",
     newEmployee, function (err, res) {
       if (err) {
         result(err, null);
@@ -19,7 +18,7 @@ Task.createEmployee = function createEmployee(newEmployee, result) {
     });
 };
 
-Task.getAllEmployees = function getAllEmployees(result) {
+Employee.getAllEmployees = function getAllEmployees(result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -36,7 +35,7 @@ Task.getAllEmployees = function getAllEmployees(result) {
     });
 };
 
-Task.getEmployeeById = function getEmployee(employeeId, result) {
+Employee.getEmployeeById = function getEmployee(employeeId, result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -53,9 +52,9 @@ Task.getEmployeeById = function getEmployee(employeeId, result) {
     });
 };
 
-Task.updateEmployeeById = function updateEmployee(id, employee, result) {
+Employee.updateEmployeeById = function updateEmployee(id, employee, result) {
   sql.query(
-    "UPDATE Employee SET ? where empID=?",
+    "UPDATE Employee SET ? where empID = ?",
     [employee, id], function (err, res) {
       if (err) {
         result(err);
@@ -65,7 +64,7 @@ Task.updateEmployeeById = function updateEmployee(id, employee, result) {
     });
 };
 
-Task.removeEmployeeById = function removeEmployee(id, result) {
+Employee.removeEmployeeById = function removeEmployee(id, result) {
   sql.query(
     "DELETE FROM Employee WHERE empID = ?",
     [id], function (err, res) {
@@ -77,4 +76,4 @@ Task.removeEmployeeById = function removeEmployee(id, result) {
     });
 };
 
-module.exports = Task;
+module.exports = Employee;

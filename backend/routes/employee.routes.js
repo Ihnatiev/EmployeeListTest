@@ -9,5 +9,4 @@ module.exports = function (app) {
     .get(todoList.read_employee)
     .put(todoList.update_employee)
     .delete(todoList.delete_employee);
-
 };

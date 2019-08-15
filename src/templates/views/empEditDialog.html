@@ -1,14 +1,14 @@
-<div id="popUpDialog-bg" ng-show="showEmpEditDialog">
+<div id="popUpDialog-bg" ng-show="showEmpEditDialog" ng-controller="EmployeeCtrl">
   <div id="popUpDialog">
     <div class="content">
       <div class="modal-header">
         <h3>Edit an employee</h3>
       </div>
-      <div class="modal-body">
-        <input type="text" name="emp_name" class="form-control" placeholder="Enter Employee Name" ng-model="empName" />
+      <div class="modal-body" ng-repeat="emp in employeeEditDetails">
+        <input type="text" class="form-control" ng-model="empEditName"/>
         <label for="isActive">isActive:</label>
-        <label class="radio-inline gender">
-          <input type="radio" ng-model="empActive.model" value="{{ 0 || 1 }}">
+        <label class="radio-inline active">
+          <input type="checkbox" ng-model="empActive.value" value="{{ 0 || 1 }}">
         </label>
         <div>
           <select name="num" class="form-control" ng-model="dpName.model">
@@ -19,8 +19,12 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" value="Submit" ng-click="editEmployee()">Save</button>
-        <button class="btn btn-warning" ng-click="closeEmpEditDialog()">Cancel</button>
+        <button class="btn btn-primary" value="Submit" ng-click="editEmployee()">
+          Save
+        </button>
+        <button class="btn btn-warning" ng-click="closeEmpEditDialog()">
+          Cancel
+        </button>
       </div>
     </div>
   </div>

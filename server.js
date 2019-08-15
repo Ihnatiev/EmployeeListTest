@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3002;
 
+
+const userRoutes = require('./backend/routes/user.routes');
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -26,3 +29,6 @@ app.listen(port, () => {
 
 const routes = require('./backend/routes/employee.routes');
 routes(app);
+
+// app.use("/api/employee", employeeRoutes);
+app.use("/api/user", userRoutes);

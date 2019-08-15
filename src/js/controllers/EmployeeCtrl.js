@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('EmployeeCtrl', ['$scope', '$http', '$log', function ($scope, $http, $log) {
 
     $scope.dpName = {
       model: null,
@@ -13,7 +13,7 @@ var app = angular.module('EmpApp')
     };
 
     $scope.empActive = {
-      model: false
+      value: false
     };
 
     $scope.getAllEmployees = function () {
@@ -24,7 +24,7 @@ var app = angular.module('EmpApp')
         if (res.status == 200)
           $scope.employees = res.data;
       }, function errorCallback() {
-        alert("Error. Server is not responding");
+        alert('404 Not Found')
       }
       );
     };
@@ -48,7 +48,7 @@ var app = angular.module('EmpApp')
         url: 'http://localhost:3002/api/employees',
         data: {
           'empName': $scope.empName,
-          'empActive': $scope.empActive.model,
+          'empActive': $scope.empActive.value,
           'empDepartment': $scope.dpName.model
         },
         headers: { 'Content-Type': 'application/JSON' }
@@ -61,27 +61,40 @@ var app = angular.module('EmpApp')
         alert('Unable to create an employee: ' + error.message);
       });
     };
-///////////////////////////////////////////////////////////////////////////////////////////////
-    $scope.editEmployee = function (employeeId) {
+    //////////////////////////////////////////////////////////////////////////////
+
+    $scope.editBtn = function (employeeId) {
+      $scope.showEmpEditDialog = true;
       $http({
-        method: 'PUT',
+        method: 'GET',
+        url: 'http://localhost:3002/api/employees/' + employeeId
+      }).then(function successCallback(res) {
+        $scope.employeeEditDetails = res.data;
+      }, function errorCallback() {
+        alert("Error");
+      }
+      );
+    };
+
+    $scope.editEmployee = function (employeeId) {
+      $http.put({
         url: 'http://localhost:3002/api/employees/' + employeeId,
         data: {
-          'empName': $scope.empName,
-          'empActive': $scope.empAcive.model,
-          'empDepartment': $scope.dpName.model
-        },
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          'empName': $scope.empEditName,
+          'empActive': $scope.empActive.value,
+          'empDepartment': $scope.dpName.model,
+          // 'empID': $scope.empID
+        }
       }).then(function successCallback(data) {
         $scope.employees.push(data);
-        alert("Employee editd successfully");
+        // $scope.closeEmpEditDialog();
+        // $scope.getAllEmployees();
+      }, function errorCallback() {
+        alert('Unable to update an employee');
         $scope.closeEmpEditDialog();
-        $scope.getAllEmployees();
-      }, function errorCallback(error) {
-        alert('Unable to update an employee: ' + error.message);
       });
     };
-////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
     $scope.deleteEmployee = function (employeeId) {
       if (confirm("Are you sure you want to delete this employee?")) {
         $http({
@@ -97,25 +110,21 @@ var app = angular.module('EmpApp')
       }
     };
 
-    // $scope.pageChanged = function () {
-    //   $scope.getAllEmployees();
-    // };
+    $scope.pageChanged = function () {
+      $scope.getAllEmployees();
+    };
 
-    // $scope.changePageSize = function () {
-    //   $scope.pageIndex = 1;
-    //   $scope.getAllEmployees();
-    // };
+    $scope.changePageSize = function () {
+      $scope.pageIndex = 1;
+      $scope.getAllEmployees();
+    };
 
     $scope.addBtn = function () {
       $scope.showEmpAddDialog = true;
     };
 
-    $scope.editBtn = function () {
-      $scope.showEmpEditDialog = true;
-    };
-
     $scope.searchEmployee = function () {
-      $scope.searchEmpName = $scope.searchName;
+      $scope.search = $scope.searchName;
     };
 
   }])

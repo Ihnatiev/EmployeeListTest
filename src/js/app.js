@@ -1,6 +1,6 @@
 angular.module('EmpApp', ['ngRoute'])
-    .config(['$routeProvider',
-        function ($routeProvider) {
+    .config(['$routeProvider', '$locationProvider',
+        function ($routeProvider, $locationProvider) {
             $routeProvider
                 .when('/', {
                     templateUrl: 'views/home.html',
@@ -8,6 +8,10 @@ angular.module('EmpApp', ['ngRoute'])
                 })
                 .when('/employees', {
                     templateUrl: 'views/empList.html',
+                    controller: 'EmployeeCtrl'
+                })
+                .when('/employees/:employeeId', {
+                    templateUrl: 'views/empViewDialog.html',
                     controller: 'EmployeeCtrl'
                 });
         }

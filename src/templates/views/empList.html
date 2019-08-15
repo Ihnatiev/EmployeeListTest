@@ -29,17 +29,15 @@
            <th class="text-center" style="width:25%">Department</th>
            <th></th>
          </tr>
-         <tr ng-repeat="emp in employees | filter: searchEmpName">
+         <tr ng-repeat="emp in employees | filter: search">
            <td>
              <button class="btn btn-info" ng-click="getEmployeeById(emp.empID)" title="View">
                <span class="glyphicon glyphicon-view"></span>View</button>
            </td>
            <td>
-             <button class="btn btn-warning" ng-click="editBtn(emp.empID,emp.empName,emp.empActive,emp.dpName)"
+             <button class="btn btn-warning" ng-click="editBtn(emp.empID)"
                title="Edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
-           <!-- <td class="text-center">{{$index + 1}}</td>
-           <td style="display:none">{{emp.empID}}</td> -->
            <td class="text-center">{{emp.empID}}</td>
            <td class="text-center">{{emp.empName}}</td>
            <td class="text-center">{{emp.empActive}}</td>
