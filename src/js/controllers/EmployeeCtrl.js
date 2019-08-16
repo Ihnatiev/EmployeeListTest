@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('EmpApp')
-  .controller('EmployeeCtrl', ['$scope', '$http', '$log', function ($scope, $http, $log) {
+  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.dpName = {
       model: null,

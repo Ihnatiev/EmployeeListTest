@@ -18,4 +18,6 @@ User.createUser = function createUser(newUser, result) {
     });
 };
 
+User.findOne = function () {}
+
 module.exports = User;
