@@ -4,7 +4,7 @@ var app = angular.module('EmpApp')
   .controller('SignupCtrl', ['$scope', '$http', '$log', '$location', function ($scope, $http, $log, $location) {
     $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
 
-    $scope.onSignup = function createUser() {
+    $scope.onSignup = () => {
       $http({
         method: 'POST',
         url: 'http://localhost:3002/api/user/signup',

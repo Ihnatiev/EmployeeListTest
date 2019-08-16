@@ -1,7 +1,7 @@
 <form name="login" class="formUser" ng-controller="LoginCtrl">
   <div class="container">
     <label for="email"><b>Email</b></label>
-    <input class="input" type="text" ng-pattern="wordLog" name="uemail" placeholder="Enter Email" ng-model="userEmail" required>
+    <input class="input" type="text" ng-pattern="word" name="uemail" placeholder="Enter Email" ng-model="userEmail" required>
     <span class="error" ng-show="login.uemail.$error.pattern">Invalid email!</span>
     <br />
     <label for="psw"><b>Password</b></label>

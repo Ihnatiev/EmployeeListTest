@@ -11,15 +11,14 @@ exports.create_user = (req, res, next) => {
         email: req.body.email,
         password: hash
       });
-      User.createUser(user, function (err, insertId) {
+      User.createUser(user, function (err, res) {
         if (err) {
           res.status(500).json({
             message: 'Invalid authentication credentials!'
           });
         } else {
           res.status(201).json({
-            message: 'User created!',
-            result: 'Id: ' + insertId
+            message: 'User created!'
           });
         };
       });
