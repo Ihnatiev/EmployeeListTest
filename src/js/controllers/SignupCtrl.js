@@ -1,9 +1,8 @@
 'use strict';
-var app = angular.module('EmpApp')
-  .controller('SignupCtrl', ['$scope', '$http', function ($scope, $http) {
-    $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
 
-    $scope.user = [];
+var app = angular.module('EmpApp')
+  .controller('SignupCtrl', ['$scope', '$http', '$log', '$location', function ($scope, $http, $log, $location) {
+    $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
 
     $scope.onSignup = function createUser() {
       $http({
@@ -17,13 +16,13 @@ var app = angular.module('EmpApp')
         headers: { 'Content-Type': 'application/JSON' }
       }).then(
         newUser => {
-          $scope.user.push(newUser);
           alert('User created!');
           document.forms["sign"].reset();
+          $log.info(newUser);
         })
         .catch(
           error => {
-            alert(error.message);
+            console.log(error);
           });
     };
   }]);  

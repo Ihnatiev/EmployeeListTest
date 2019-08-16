@@ -64,7 +64,7 @@ exports.user_login = (req, res, next) => {
       });
     })
     .catch(err => {
-      return res.status(401).json({
+      return res.status(500).json({
         message: 'Invalid authentication credentials!',
         error: err
       });

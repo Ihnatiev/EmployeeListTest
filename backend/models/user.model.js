@@ -18,6 +18,18 @@ User.createUser = function createUser(newUser, result) {
     });
 };
 
-User.findOne = function () {}
+User.findOne = function findUser(email, result) {
+  sql.query(
+    "SELECT ? FROM User WHERE email = ?", email, 
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res.insertId);
+      }
+    }
+  )
+}
 
 module.exports = User;
