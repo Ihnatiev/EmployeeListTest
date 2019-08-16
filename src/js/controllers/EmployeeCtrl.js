@@ -20,13 +20,14 @@ var app = angular.module('EmpApp')
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees'
-      }).then(function successCallback(res) {
-        if (res.status == 200)
-          $scope.employees = res.data;
-      }, function errorCallback() {
-        alert('404 Not Found')
-      }
-      );
+      }).then(
+        res => {
+          if (res.status == 200)
+            $scope.employees = res.data;
+        }).catch(
+          error => {
+            alert(error.message);
+          });
     };
 
     $scope.getEmployeeById = function (employeeId) {
@@ -34,12 +35,13 @@ var app = angular.module('EmpApp')
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees/' + employeeId
-      }).then(function successCallback(res) {
-        $scope.employeeDetails = res.data;
-      }, function errorCallback() {
-        alert("Error");
-      }
-      );
+      }).then(
+        res => {
+          $scope.employeeDetails = res.data;
+        }).catch(
+          error => {
+            alert(error.message);
+          });
     };
 
     $scope.createEmployee = function () {
@@ -52,14 +54,17 @@ var app = angular.module('EmpApp')
           'empDepartment': $scope.dpName.model
         },
         headers: { 'Content-Type': 'application/JSON' }
-      }).then(function successCallback(data) {
-        $scope.employees.push(data);
-        alert("Employee added successfully");
-        $scope.closeEmpAddDialog();
-        $scope.getAllEmployees();
-      }, function errorCallback(error) {
-        alert('Unable to create an employee: ' + error.message);
-      });
+      }).then(
+        newEmp => {
+          $scope.employees.push(newEmp);
+          alert("Employee added successfully");
+          document.forms["addEmployee"].reset();
+          $scope.closeEmpAddDialog();
+          $scope.getAllEmployees();
+        }).catch(
+          error => {
+            alert(error.message);
+          });
     };
     //////////////////////////////////////////////////////////////////////////////
 
@@ -68,12 +73,13 @@ var app = angular.module('EmpApp')
       $http({
         method: 'GET',
         url: 'http://localhost:3002/api/employees/' + employeeId
-      }).then(function successCallback(res) {
-        $scope.employeeEditDetails = res.data;
-      }, function errorCallback() {
-        alert("Error");
-      }
-      );
+      }).then(
+        res => {
+          $scope.employeeEditDetails = res.data;
+        }).catch(
+          error => {
+            alert(error.message);
+          });
     };
 
     $scope.editEmployee = function (employeeId) {
@@ -85,14 +91,17 @@ var app = angular.module('EmpApp')
           'empDepartment': $scope.dpName.model,
           // 'empID': $scope.empID
         }
-      }).then(function successCallback(data) {
-        $scope.employees.push(data);
-        // $scope.closeEmpEditDialog();
-        // $scope.getAllEmployees();
-      }, function errorCallback() {
-        alert('Unable to update an employee');
-        $scope.closeEmpEditDialog();
-      });
+      }).then(
+        editEmp => {
+          $scope.employees.push(editEmp);
+          // $scope.closeEmpEditDialog();
+          // $scope.getAllEmployees();
+          document.forms["editEmployee"].reset();
+        }).catch(
+          error => {
+            alert(error.message);
+            $scope.closeEmpEditDialog();
+          });
     };
     ///////////////////////////////////////////////////////////////////////////////
     $scope.deleteEmployee = function (employeeId) {
@@ -100,10 +109,11 @@ var app = angular.module('EmpApp')
         $http({
           method: 'DELETE',
           url: 'http://localhost:3002/api/employees/' + employeeId
-        }).then(function successCallback() {
-          alert("Employee deleted");
-          $scope.getAllEmployees();
-        });
+        }).then(
+          function successCallback() {
+            alert("Employee deleted");
+            $scope.getAllEmployees();
+          });
       }
       else {
         return false;

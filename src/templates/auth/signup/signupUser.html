@@ -1,10 +1,9 @@
-<form name="sign" class="formUser" ng-controller="SignupCtrl">
+<form name="sign" class="formUser" ng-controller="SignupCtrl" ng-model="signForm">
   <div class="container">
     <label for="name"><b>Name</b></label>
     <input class="input" type="text" name="uname" placeholder="Enter Name" ng-model="userName" required>
     <label for="email"><b>Email</b></label>
-    <input class="input" type="text" ng-pattern="word" name="uemail" placeholder="Enter Email" ng-model="userEmail"
-      required>
+    <input class="input" type="text" ng-pattern="word" name="uemail" placeholder="Enter Email" ng-model="userEmail" required>
     <span class="error" ng-show="sign.uemail.$error.pattern">Invalid email!</span>
     <br />
     <label for="psw"><b>Password</b></label>

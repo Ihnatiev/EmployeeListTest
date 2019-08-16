@@ -4,25 +4,30 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 exports.create_user = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10).then(hash => {
-    const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: hash
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: hash
+      });
+      User.createUser(user, function (err, insertId) {
+        if (err) {
+          res.status(500).json({
+            message: 'Invalid authentication credentials!'
+          });
+        } else {
+          res.status(201).json({
+            message: 'User created!',
+            result: 'Id: ' + insertId
+          });
+        };
+      });
+    }).catch(err => {
+      res.status(500).json({
+        error: err
+      });
     });
-    User.createUser(user, function (err, insertId) {
-      if (err) {
-        res.status(500).json({
-          message: 'Invalid authentication credentials!'
-        });
-      } else {
-        res.status(201).json({
-          message: 'User created!',
-          result: 'Id: ' + insertId
-        });
-      };
-    });
-  });
 };
 
 exports.user_login = (req, res, next) => {
@@ -44,10 +49,10 @@ exports.user_login = (req, res, next) => {
         });
       }
       const token = jwt.sign(
-        { 
+        {
           name: fetchedUser.name,
-          email: fetchedUser.email, 
-          id: fetchedUser._id 
+          email: fetchedUser.email,
+          id: fetchedUser._id
         },
         'secret_this_should_be_longer',
         { expiresIn: '1h' }
@@ -58,9 +63,10 @@ exports.user_login = (req, res, next) => {
         id: fetchedUser._id
       });
     })
-    .catch(error => {
+    .catch(err => {
       return res.status(401).json({
-        message: 'Invalid authentication credentials!'
+        message: 'Invalid authentication credentials!',
+        error: err
       });
     });
 }
