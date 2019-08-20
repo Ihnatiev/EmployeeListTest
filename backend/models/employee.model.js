@@ -1,4 +1,4 @@
-const sql = require('../app.js');
+const sql = require('../config/connection');
 
 const Employee = function (emp) {
   this.empName = emp.empName;

@@ -85,6 +85,7 @@ span.psw {
 
 .formUser {
   border: 3px solid #f1f1f1;
+  box-shadow: 0 0 10px 8px rgba(221, 221, 221, 1);
   width: 50%;
   display: block;
   margin: 0 auto;

@@ -9,7 +9,7 @@ var app = angular.module('EmpApp')
         method: 'POST',
         url: 'http://localhost:3002/api/user/signup',
         data: {
-          'name': $scope.userName,
+          // 'name': $scope.userName,
           'email': $scope.userEmail,
           'password': $scope.userPassword
         },
@@ -22,6 +22,8 @@ var app = angular.module('EmpApp')
         })
         .catch(
           error => {
+            alert('This user exists');
+            document.forms["sign"].reset();
             console.log(error);
           });
     };

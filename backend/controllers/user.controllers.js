@@ -1,71 +1,89 @@
-const bcrypt = require('bcrypt');
+const sql = require('../config/connection');
+const atob = require('atob');
 const jwt = require('jsonwebtoken');
+const Cryptr = require('cryptr'),
+  cryptr = new Cryptr('myTotalySecretKey');
 
-const User = require('../models/user.model');
+exports.signup = (req, res, next) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  var dec_password = atob(password);
+  var encrypted_password = cryptr.encrypt(dec_password);
 
-exports.create_user = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash
-      });
-      User.createUser(user, function (err, res) {
-        if (err) {
-          res.status(500).json({
-            message: 'Invalid authentication credentials!'
-          });
-        } else {
-          res.status(201).json({
-            message: 'User created!'
-          });
-        };
-      });
-    }).catch(err => {
-      res.status(500).json({
-        error: err
-      });
+  sql.query("INSERT INTO User(`email`,`password`) \
+    VALUES ('" + email + "','" + encrypted_password + "')",
+    function (err) {
+      if (err) {
+        res.status(500).json({
+          error: 'An error occurred'
+        });
+      } else {
+        res.status(201).json({
+          message: 'User created!'
+        });
+      };
     });
 };
 
-exports.user_login = (req, res, next) => {
-  let fetchedUser;
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
-      }
-      fetchedUser = user;
-      return bcrypt.compare(req.body.password, user.password);
-    })
-    .then(result => {
-      if (!result) {
-        return res.status(401).json({
-          message: 'Auth failed'
-        });
-      }
-      const token = jwt.sign(
-        {
-          name: fetchedUser.name,
-          email: fetchedUser.email,
-          id: fetchedUser._id
+exports.login = (req, res, next) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  var dec_password = atob(password);
+  var encrypted_password = cryptr.encrypt(dec_password);
+
+  sql.query("SELECT email, password FROM\
+  `user` WHERE email = '"+ email + "'",
+    function (err, results) {
+      if (results != "") {
+        var data = JSON.stringify(results);
+        var jwtId = Math.random().toString(36).substring(7);
+        var payload = {
+          jwtid: jwtId,
+          audience: 'TEST',
+          data: data
+        };
+        jwt.sign(payload, 'secret_this_should_be_longer', { 
+          algorithm: 'HS256', 
+          expiresIn: '1h' 
         },
-        'secret_this_should_be_longer',
-        { expiresIn: '1h' }
-      );
-      res.status(200).json({
-        token: token,
-        expiresIn: 3600,
-        id: fetchedUser._id
-      });
-    })
-    .catch(err => {
-      return res.status(500).json({
-        message: 'Invalid authentication credentials!',
-        error: err
-      });
+          function (err, token) {
+            if (err) {
+              res.json({
+                "results":
+                {
+                  "status": false,
+                  "msg": 'Error occurred while generating token'
+                }
+              });
+            } else {
+              if (token != false) {
+                res.header();
+                res.json({
+                  "results":
+                  {
+                    "status": true,
+                    "token": token,
+                    "user": results[0]
+                  }
+                });
+                res.end();
+              }
+              else {
+                res.json({
+                  "results":
+                    { "status": false, "msg": 'Could not create token' },
+                });
+                res.end();
+              }
+            }
+          });
+      }
+      else if (results == "") {
+        res.json({
+          "results":
+            { "status": false, "msg": 'Not found User!' }
+        });
+        res.end();
+      }
     });
-}
+};
