@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3002;
 
-
+const employeesRoutes = require('./backend/routes/employee.routes');
 const userRoutes = require('./backend/routes/user.routes');
 
 const app = express();
@@ -27,8 +27,8 @@ app.listen(port, () => {
   console.log('Server started on the port ' + port);
 });
 
-const routes = require('./backend/routes/employee.routes');
-routes(app);
+// const routes = require('./backend/routes/employee.routes');
+// routes(app);
 
-// app.use("/api/employee", employeeRoutes);
+app.use("/api/employees", employeesRoutes);
 app.use("/api/user", userRoutes);

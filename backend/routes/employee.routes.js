@@ -1,12 +1,14 @@
-module.exports = function (app) {
-  const todoList = require('../controllers/employee.controllers');
+const express = require('express');
+const router = express.Router();
+const checkAuth = require('../middleware/check-auth');
 
-  app.route('/api/employees')
-    .get(todoList.list_all_employees)
-    .post(todoList.create_employee);
+const EmployeeController = require('../controllers/employee.controllers');
 
-  app.route('/api/employees/:employeeId')
-    .get(todoList.read_employee)
-    .put(todoList.update_employee)
-    .delete(todoList.delete_employee);
-};
+router.get('', EmployeeController.displayAllEmployees);
+router.post('', checkAuth, EmployeeController.createNewEmployee);
+
+router.get('/:employeeId', EmployeeController.readAnEmployee);
+router.put('/:employeeId', checkAuth, EmployeeController.updateAnEmployee);  
+router.delete('/:employeeId', checkAuth, EmployeeController.deleteAnEmployee);
+
+module.exports = router;
