@@ -60,7 +60,7 @@ exports.login = (req, res, next) => {
                 { status: "true" },
               token: token
             });
-            res.end();
+            // res.end();
           } else {
             res.send("Could not create token");
             res.end();

@@ -3,7 +3,7 @@ var app = angular.module('EmpApp')
   .controller('LoginCtrl', ['$scope', '$http', '$log',
     function ($scope, $http, $log) {
       $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
-      
+
       $scope.onLogin = () => {
         $http({
           method: 'POST',
