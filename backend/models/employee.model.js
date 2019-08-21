@@ -6,19 +6,7 @@ const Employee = function (emp) {
   this.empDepartment = emp.empDepartment;
 };
 
-Employee.createEmployee = function createEmployee(newEmployee, result) {
-  sql.query("INSERT INTO Employee SET ?",
-    newEmployee, function (err, res) {
-      if (err) {
-        result(err, null);
-      }
-      else {
-        result(null, res.insertId);
-      }
-    });
-};
-
-Employee.getAllEmployees = function getAllEmployees(result) {
+Employee.displayEmployees = function getAllEmployees(result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -35,7 +23,19 @@ Employee.getAllEmployees = function getAllEmployees(result) {
     });
 };
 
-Employee.getEmployeeById = function getEmployee(employeeId, result) {
+Employee.newEmployee = function createEmployee(newEmployee, result) {
+  sql.query("INSERT INTO Employee SET ?",
+    newEmployee, function (err, res) {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res.insertId);
+      }
+    });
+};
+
+Employee.getEmpById = function getEmployee(employeeId, result) {
   sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
@@ -52,7 +52,7 @@ Employee.getEmployeeById = function getEmployee(employeeId, result) {
     });
 };
 
-Employee.updateEmployeeById = function updateEmployee(id, employee, result) {
+Employee.updateEmpById= function updateEmployee(id, employee, result) {
   sql.query(
     "UPDATE Employee SET ? where empID = ?",
     [employee, id], function (err, res) {
@@ -64,7 +64,7 @@ Employee.updateEmployeeById = function updateEmployee(id, employee, result) {
     });
 };
 
-Employee.removeEmployeeById = function removeEmployee(id, result) {
+Employee.removeEmpById = function removeEmployee(id, result) {
   sql.query(
     "DELETE FROM Employee WHERE empID = ?",
     [id], function (err, res) {

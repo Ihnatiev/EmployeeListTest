@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const checkAuth = require('../middleware/check-auth');
 
 const EmployeeController = require('../controllers/employee.controllers');
 
-router.get('', EmployeeController.displayAllEmployees);
-router.post('', checkAuth, EmployeeController.createNewEmployee);
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/:employeeId', EmployeeController.readAnEmployee);
-router.put('/:employeeId', checkAuth, EmployeeController.updateAnEmployee);  
-router.delete('/:employeeId', checkAuth, EmployeeController.deleteAnEmployee);
+router.get('/', EmployeeController.getAllEmployees);
+
+router.post('/', checkAuth, EmployeeController.createAnEmployee);
+
+router.get('/:employeeId', EmployeeController.getEmployeeById);
+
+router.put('/:employeeId', checkAuth, EmployeeController.updateEmployeeById);
+
+router.delete('/:employeeId', checkAuth, EmployeeController.deleteEmployeeById);
+
 
 module.exports = router;

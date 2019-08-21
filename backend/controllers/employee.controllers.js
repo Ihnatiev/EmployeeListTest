@@ -1,7 +1,7 @@
 const Employee = require('../models/employee.model');
 
-exports.displayAllEmployees = function (req, res, next) {
-  Employee.getAllEmployees(function (err, employee) {
+exports.getAllEmployees = function (req, res, next) {
+  Employee.displayEmployees(function (err, employee) {
     if (err) {
       res.send(err);
     } else {
@@ -10,9 +10,9 @@ exports.displayAllEmployees = function (req, res, next) {
   });
 };
 
-exports.createNewEmployee = function (req, res, next) {
+exports.createAnEmployee = function (req, res, next) {
   var new_employee = new Employee(req.body);
-  Employee.createEmployee(new_employee, function (err, employee) {
+  Employee.newEmployee(new_employee, function (err, employee) {
     if (err) {
       res.send(err);
     } else {
@@ -21,24 +21,24 @@ exports.createNewEmployee = function (req, res, next) {
   });
 };
 
-exports.readAnEmployee = function (req, res) {
-  Employee.getEmployeeById(req.params.employeeId, function (err, employee) {
+exports.getEmployeeById = function (req, res) {
+  Employee.getEmpById(req.params.employeeId, function (err, employee) {
     if (err)
       res.send(err);
     res.json(employee);
   });
 };
 
-exports.updateAnEmployee = function (req, res) {
-  Employee.updateEmployeeById(req.params.employeeId, new Employee(req.body), function (err, employee) {
+exports.updateEmployeeById = function (req, res) {
+  Employee.updateEmpById(req.params.employeeId, new Employee(req.body), function (err, employee) {
     if (err)
       res.send(err);
     res.json(employee);
   });
 };
 
-exports.deleteAnEmployee = function (req, res) {
-  Employee.removeEmployeeById(req.params.employeeId, function (err, employee) {
+exports.deleteEmployeeById = function (req, res) {
+  Employee.removeEmpById(req.params.employeeId, function (err, employee) {
     if (err)
       res.send(err);
     res.json({ message: 'Employee successfully deleted' });
