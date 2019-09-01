@@ -1,13 +1,12 @@
-<form name="login" class="formUser" ng-controller="LoginCtrl">
+<form name="login" class="formUser" ng-submit="signin()" ng-controller="LoginCtrl">
   <div class="container">
     <label for="email"><b>Email</b></label>
-    <input class="input" type="text" ng-pattern="word" name="uemail" placeholder="Enter Email" ng-model="email" required>
-    <span class="error" ng-show="login.uemail.$error.pattern">Invalid email!</span>
+    <input class="input" type="text" ng-pattern="emailValid" name="email" placeholder="Enter Email" ng-model="user.email" required>
+    <span class="error" ng-show="login.email.$error.pattern">Invalid email!</span>
     <br />
-    <label for="psw"><b>Password</b></label>
-    <input class="input" type="password" placeholder="Enter Password" name="upsw" ng-model="password" required>
-
-    <button class="btn btn-success" type="submit" ng-click="onLogin()">Login</button>
+    <label for="password"><b>Password</b></label>
+    <input class="input" type="password" placeholder="Enter Password" name="password" ng-model="user.password" required>
+    <button class="btn btn-success" type="submit">Login</button>
     <button class="btn btn-danger" type="button" class="cancelbtn">Cancel</button>
     <span class="psw">Forgot <a href="#">password?</a></span>
   </div>

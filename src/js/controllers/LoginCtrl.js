@@ -1,28 +1,33 @@
-'use strict';
-var app = angular.module('EmpApp')
-  .controller('LoginCtrl', ['$scope', '$http', '$log',
-    function ($scope, $http, $log) {
-      $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+'use strict'
 
-      $scope.onLogin = () => {
-        $http({
-          method: 'POST',
-          url: 'http://localhost:3002/api/user/login',
-          data: {
-            'email': $scope.email,
-            'password': $scope.password
-          },
-          headers: { 'Content-Type': 'application/JSON' }
-        }).then(
-          response => {
-            document.forms["login"].reset();
-            $log.info(response);
-          })
-          .catch(
-            error => {
-              alert(error);
-              document.forms["login"].reset();
-              $log.info(error);
-            });
-      };
-    }]);
+angular.module('app')
+  .controller('LoginCtrl', Controller);
+
+function Controller($scope, $http, $location, $localStorage, $log, Session, AuthService) {
+  $scope.emailValid = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+
+  $scope.user = {};
+  $scope.error = false;
+
+  $scope.signin = function (email) {
+
+    $http.post('http://localhost:3002/api/user/login', $scope.user)
+      .then(function (response) {
+        var data = response.data;
+        if (data.status == "true") {
+          $localStorage.currentUser = { email: email, token: response.token };
+          $http.defaults.headers.common.Authorization = 'Bearer ' + response.token;
+          document.forms["login"].reset();
+          AuthService.setUser(data);
+        } else {
+          $scope.error = true;
+        }
+
+        $log.info(Session.get('tokenId'));
+        $location.path('/employees');
+      });
+
+  };
+};
+
+

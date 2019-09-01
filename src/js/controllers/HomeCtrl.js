@@ -1,4 +1,4 @@
-angular.module('EmpApp')
+angular.module('app')
 .controller('HomeCtrl', [
     '$scope',
     function($scope) {

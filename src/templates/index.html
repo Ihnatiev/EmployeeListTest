@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="EmpApp">
+<html lang="en" ng-app="app">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="icon" href="https://das.nh.gov/EmployeePortal/graphics/employees-app-icon.png" type="image/x-icon">
 
@@ -11,14 +11,17 @@
 <body>
     <ul class='menu'>
         <h1>EmployeeListApp</h1>
-        <li><a href="#/!">Logout</a></li>
-        <li><a href="#!user/signup">Signup</a></li>
-        <li><a href="#!user/login">Login</a></li> 
-        <li><a href="#!employees">Employees</a></li>
-        <li><a href="#/!">Home</a></li>
+        <li><a href="#!/user/login">Logout</a></li>
+        <li><a href="#!/user/signup">Signup</a></li>
+        <li><a href="#!/user/login">Login</a></li> 
+        <li><a href="#!/employees">Employees</a></li>
+        <li><a href="#!/">Home</a></li>
     </ul>
-    <ng-view class="view ng-scope"></ng-view>
+    <!-- <ng-view class="view ng-scope"></ng-view> -->
+    <ui-view></ui-view>
 </body>
 <script src="js/scripts.js"></script>
-
+<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.22/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+<script src="https://code.angularjs.org/1.5.5/angular-cookies.min.js"></script>
 </html>

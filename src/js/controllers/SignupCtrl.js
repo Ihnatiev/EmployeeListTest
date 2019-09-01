@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('EmpApp')
+angular.module('app')
   .controller('SignupCtrl', ['$scope', '$http', '$log', '$location', function ($scope, $http, $log, $location) {
     $scope.word = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('EmpApp')
+var app = angular.module('app')
   .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.dpName = {
