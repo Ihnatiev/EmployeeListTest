@@ -45,7 +45,7 @@ exports.login = (req, res) => {
         data: data
       };
       if (error) {
-        res.json({
+        res.status(404).json({
           success: false,
           message: 'There are some error with query'
         });
@@ -53,7 +53,7 @@ exports.login = (req, res) => {
         if (results.length > 0) {
           bcrypt.compare(password, results[0].password, function (err, ress) {
             if (!ress) {
-              res.json({
+              res.status(500).json({
                 success: false,
                 message: "Email and password does not match"
               });
@@ -62,7 +62,7 @@ exports.login = (req, res) => {
                 algorithm: 'HS256',
                 expiresIn: '1h'
               });
-              res.json({
+              res.status(200).json({
                 success: true,
                 message: "Successfully Login",
                 token: token
@@ -71,7 +71,7 @@ exports.login = (req, res) => {
           });
         }
         else {
-          res.json({
+          res.status(400).json({
             success: false,
             message: "Authentication failed. User not found."
           });
