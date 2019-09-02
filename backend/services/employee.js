@@ -8,7 +8,7 @@ Employee.displayEmployees = function getAllEmployees(result) {
     empActive, dpName FROM Employee\
     INNER JOIN Department\
     ON empDepartment = dpID",
-    function (err, res) {
+    (err, res) => {
       if (err) {
         result(null, err);
       }
@@ -20,7 +20,7 @@ Employee.displayEmployees = function getAllEmployees(result) {
 
 Employee.newEmployee = function createEmployee(newEmployee, result) {
   sql.query("INSERT INTO Employee SET ?",
-    newEmployee, function (err, res) {
+    newEmployee, (err, res) => {
       if (err) {
         result(err, null);
       }
@@ -37,7 +37,7 @@ Employee.getEmpById = function getEmployee(employeeId, result) {
     empActive, dpName FROM Employee\
     INNER JOIN Department\
     ON empDepartment = dpID WHERE empID = ? ",
-    employeeId, function (err, res) {
+    employeeId, (err, res) => {
       if (err) {
         result(err, null);
       }
@@ -50,11 +50,11 @@ Employee.getEmpById = function getEmployee(employeeId, result) {
 Employee.updateEmpById= function updateEmployee(id, employee, result) {
   sql.query(
     "UPDATE Employee SET ? where empID = ?",
-    [employee, id], function (err, res) {
+    [employee, id], (err, res) => {
       if (err) {
-        result(err);
+        result(err, null);
       } else {
-        result(res);
+        result(null, res);
       }
     });
 };
@@ -62,7 +62,7 @@ Employee.updateEmpById= function updateEmployee(id, employee, result) {
 Employee.removeEmpById = function removeEmployee(id, result) {
   sql.query(
     "DELETE FROM Employee WHERE empID = ?",
-    [id], function (err, res) {
+    [id], (err, res) => {
       if (err) {
         result(null, err);
       } else {

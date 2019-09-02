@@ -1,47 +1,90 @@
 const Employee = require('../services/employee');
 
-exports.getAllEmployees = function (req, res, next) {
-  Employee.displayEmployees(function (err, employee) {
+exports.getAllEmployees = (req, res) => {
+  Employee.displayEmployees((err, employees) => {
     if (err) {
-      res.send(err);
+      res.status(500).json({
+        success: false,
+        message: 'Fetching employees failed!'
+      });
     } else {
-      res.send(employee);
-    }
+      res.status(200).json({
+        success: true,
+        message: 'Employees fetched successfully!',
+        employees: employees
+      });
+    };
   });
 };
 
-exports.createAnEmployee = function (req, res, next) {
-  var new_employee = new Employee(req.body);
-  Employee.newEmployee(new_employee, function (err, employee) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.json(employee);
-    }
-  });
+exports.createAnEmployee = (req, res) => {
+  var newEmp = new Employee(req.body);
+  Employee.newEmployee(newEmp,
+    (err, employee) => {
+      if (err) {
+        res.status(500).json({
+          success: false,
+          message: 'Adding employee failed!'
+        });
+      } else {
+        res.status(201).json({
+          success: true,
+          message: 'Employee added successfully!',
+          employee: employee
+        });
+      };
+    });
 };
 
-exports.getEmployeeById = function (req, res) {
-  Employee.getEmpById(req.params.employeeId, function (err, employee) {
-    if (err)
-      res.send(err);
-    res.json(employee);
-  });
+exports.getEmployeeById = (req, res) => {
+  Employee.getEmpById(req.params.employeeId,
+    (err, employee) => {
+      if (err) {
+        res.status(404).json({
+          success: false,
+          message: 'Employee not found!'
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          employee: employee
+        });
+      };
+    });
 };
 
-exports.updateEmployeeById = function (req, res) {
-  Employee.updateEmpById(req.params.employeeId, new Employee(req.body), function (err, employee) {
-    if (err)
-      res.send(err);
-    res.json(employee);
-  });
+exports.updateEmployeeById = (req, res, next) => {
+  Employee.updateEmpById(req.params.employeeId,
+    new Employee(req.body),
+    (err, employee) => {
+      if (err) {
+        res.status(404).json({
+          success: false,
+          message: 'Employee not found!'
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: 'Update successful!',
+          employee: employee
+        });
+      };
+    });
 };
 
-exports.deleteEmployeeById = function (req, res) {
-  Employee.removeEmpById(req.params.employeeId, function (err, employee) {
-    if (err)
-      res.send(err);
-    res.json({ message: 'Employee successfully deleted' });
-  });
+exports.deleteEmployeeById = (req, res) => {
+  Employee.removeEmpById(req.params.employeeId,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({
+          success: false,
+          message: 'Deleting posts failed!'
+        });
+      } else if (result)
+        res.status(200).json({
+          success: true,
+          message: 'Deletion successful!'
+        });
+    });
 };
 
