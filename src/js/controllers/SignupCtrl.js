@@ -9,9 +9,8 @@ angular.module('app')
         method: 'POST',
         url: 'http://localhost:3000/api/user/signup',
         data: {
-          // 'name': $scope.userName,
-          'email': $scope.userEmail,
-          'password': $scope.userPassword
+          'email': $scope.email,
+          'password': $scope.password
         },
         headers: { 'Content-Type': 'application/JSON' }
       }).then(

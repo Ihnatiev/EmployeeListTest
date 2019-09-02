@@ -1,14 +1,26 @@
 const sql = require('../config/connection');
 const User = require('../models/user.model');
 
-User.create_user = function createUser(user, result) {
+User.save = function signup(user, result) {
   sql.query("INSERT INTO User SET ?", user,
     (err, res) => {
       if (err) {
         result(err, null);
       }
       else {
-        result(res);
+        result(null, res);
+      }
+    });
+};
+
+User.find = function login(email, result) {
+  sql.query("SELECT * FROM User WHERE email = ?", [email],
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
       }
     });
 };

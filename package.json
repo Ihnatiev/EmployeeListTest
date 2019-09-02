@@ -13,18 +13,18 @@
     "angular": "^1.5.8",
     "angular-mocks": "^1.7.8",
     "angular-route": "^1.5.8",
-    "atob": "^2.1.2",
     "bcrypt": "^3.0.6",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
-    "crypt": "0.0.2",
-    "cryptr": "^4.0.2",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
+    "fs": "0.0.1-security",
     "gulp": "^3.9.1",
+    "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1",
-    "ngstorage": "^0.3.11"
+    "ngstorage": "^0.3.11",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "browser-sync": "^2.18.2",
