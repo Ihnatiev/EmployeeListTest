@@ -1,11 +1,8 @@
 const sql = require('../config/connection');
-// const atob = require('atob');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// const Cryptr = require('cryptr'),
-//   cryptr = new Cryptr('myTotalySecretKey');
 
-const User = require('../models/user.model');
+const User = require('../services/user');
 
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
@@ -13,17 +10,17 @@ exports.signup = (req, res, next) => {
       email: req.body.email,
       password: hash
     });
-    User.create_user(user, result => {
+    User.create_user(user, function (result, err) {
+      if (err) {
+        res.status(500).json({
+          message: 'Invalid authentication credentials!'
+        });
+      } else {
         res.status(201).json({
           message: 'User created!',
           result: result
         });
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: 'Invalid authentication credentials!'
-        });
-      });
+      }});
   });
 };
 
@@ -32,10 +29,9 @@ exports.login = (req, res, next) => {
 
   sql.query("SELECT email, password FROM\
   User WHERE email = '"+ email +"' ",
-    function (err, results) {
-      if (results != "") {
-
-        var data = JSON.stringify(results);
+    function (err, result) {
+      if (result != "") {
+        var data = JSON.stringify(result);
         var secret = 'this_secret_should_be_longer';
         var jwtId = Math.random().toString(36).substring(7);
         var payload = {
@@ -51,7 +47,7 @@ exports.login = (req, res, next) => {
           token: token
         });
         res.end();
-      } else if (results == "") {
+      } else if (result == "") {
         res.status(500).json({
           message: "Not a user"
         });

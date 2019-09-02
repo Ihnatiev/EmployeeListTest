@@ -1,4 +1,4 @@
-const Employee = require('../models/employee.model');
+const Employee = require('../services/employee');
 
 exports.getAllEmployees = function (req, res, next) {
   Employee.displayEmployees(function (err, employee) {

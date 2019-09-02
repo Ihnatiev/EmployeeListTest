@@ -5,7 +5,8 @@ function config($stateProvider, $urlRouterProvider) {
     // default route
     $urlRouterProvider.otherwise("/");
     $stateProvider
-            .state('/', {
+            .state('/home', {
+                url: '/',
                 templateUrl: 'views/home.html',
                 controller: 'HomeCtrl'
             })
@@ -38,7 +39,7 @@ function config($stateProvider, $urlRouterProvider) {
     }
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        var publicPages = ['/employees'];
+        var publicPages = ['/user/login'];
         var restrictedPage = publicPages.indexOf($location.path()) === -1;
         if (restrictedPage && !$localStorage.currentUser) {
             $location.path('/user/login');
