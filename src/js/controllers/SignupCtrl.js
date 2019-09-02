@@ -7,7 +7,7 @@ angular.module('app')
     $scope.onSignup = () => {
       $http({
         method: 'POST',
-        url: 'http://localhost:3002/api/user/signup',
+        url: 'http://localhost:3000/api/user/signup',
         data: {
           // 'name': $scope.userName,
           'email': $scope.userEmail,

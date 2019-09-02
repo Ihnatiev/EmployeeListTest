@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ui.router', 'ngStorage', 'ngCookies'])
-.config(config)
-.run(run);
+.config(config);
+// .run(run);
 function config($stateProvider, $urlRouterProvider) {
     // default route
     $urlRouterProvider.otherwise("/");
@@ -31,19 +31,19 @@ function config($stateProvider, $urlRouterProvider) {
                 templateUrl: 'views/empViewDialog.html',
                 controller: 'EmployeeCtrl'
             });
-    }
+    };
 
-    function run($rootScope, $http, $location, $localStorage){
-    if ($localStorage.currentUser) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
-    }
+//     function run($rootScope, $http, $location, $localStorage){
+//     if ($localStorage.currentUser) {
+//         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
+//     }
 
-    $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        var publicPages = ['/user/login'];
-        var restrictedPage = publicPages.indexOf($location.path()) === -1;
-        if (restrictedPage && !$localStorage.currentUser) {
-            $location.path('/user/login');
-        }
-    });
-};
+//     $rootScope.$on('$locationChangeStart', function (event, next, current) {
+//         var publicPages = ['/user/signup'];
+//         var restrictedPage = publicPages.indexOf($location.path()) === -1;
+//         if (restrictedPage && !$localStorage.currentUser) {
+//             $location.path('/user/login');
+//         }
+//     });
+// };
 

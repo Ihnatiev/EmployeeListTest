@@ -19,7 +19,7 @@ var app = angular.module('app')
     $scope.getAllEmployees = function () {
       $http({
         method: 'GET',
-        url: 'http://localhost:3002/api/employees'
+        url: 'http://localhost:3000/api/employees'
       }).then(
         res => {
           if (res.status == 200)
@@ -34,7 +34,7 @@ var app = angular.module('app')
       $scope.showEmpViewDialog = true;
       $http({
         method: 'GET',
-        url: 'http://localhost:3002/api/employees/' + employeeId
+        url: 'http://localhost:3000/api/employees/' + employeeId
       }).then(
         res => {
           $scope.employeeDetails = res.data;
@@ -47,7 +47,7 @@ var app = angular.module('app')
     $scope.createEmployee = function () {
       $http({
         method: 'POST',
-        url: 'http://localhost:3002/api/employees',
+        url: 'http://localhost:3000/api/employees',
         data: {
           'empName': $scope.empName,
           'empActive': $scope.empActive.value,
@@ -72,7 +72,7 @@ var app = angular.module('app')
       $scope.showEmpEditDialog = true;
       $http({
         method: 'GET',
-        url: 'http://localhost:3002/api/employees/' + employeeId
+        url: 'http://localhost:3000/api/employees/' + employeeId
       }).then(
         res => {
           $scope.employeeEditDetails = res.data;
@@ -84,7 +84,7 @@ var app = angular.module('app')
 
     $scope.editEmployee = function (employeeId) {
       $http.put({
-        url: 'http://localhost:3002/api/employees/' + employeeId,
+        url: 'http://localhost:3000/api/employees/' + employeeId,
         data: {
           'empName': $scope.empEditName,
           'empActive': $scope.empActive.value,
@@ -108,7 +108,7 @@ var app = angular.module('app')
       if (confirm("Are you sure you want to delete this employee?")) {
         $http({
           method: 'DELETE',
-          url: 'http://localhost:3002/api/employees/' + employeeId
+          url: 'http://localhost:3000/api/employees/' + employeeId
         }).then(
           function successCallback() {
             alert("Employee deleted");
