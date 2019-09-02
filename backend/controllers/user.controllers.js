@@ -10,7 +10,7 @@ exports.signup = (req, res, next) => {
       email: req.body.email,
       password: hash
     });
-    User.create_user(user, function (result, err) {
+    User.create_user(user, function (err, result) {
       if (err) {
         res.status(500).json({
           message: 'Invalid authentication credentials!'
@@ -29,7 +29,7 @@ exports.login = (req, res, next) => {
 
   sql.query("SELECT email, password FROM\
   User WHERE email = '"+ email +"' ",
-    function (err, result) {
+    function (result) {
       if (result != "") {
         var data = JSON.stringify(result);
         var secret = 'this_secret_should_be_longer';
