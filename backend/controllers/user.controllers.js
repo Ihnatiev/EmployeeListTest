@@ -38,9 +38,7 @@ exports.login = (req, res) => {
     function (error, results) {
       var data = JSON.stringify(results);
       var secret = 'this_secret_should_be_longer';
-      var jwtId = Math.random().toString(36).substring(7);
       var payload = {
-        jwtid: jwtId,
         audience: 'TEST',
         data: data
       };
