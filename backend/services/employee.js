@@ -1,23 +1,6 @@
 const sql = require('../config/connection');
 const Employee = require('../models/employee.model');
 
-Employee.displayEmployees = function getAllEmployees(result) {
-  sql.query(
-    "SELECT empID, empName,\
-    IF(empActive, 'Yes', 'No')\
-    empActive, dpName FROM Employee\
-    INNER JOIN Department\
-    ON empDepartment = dpID",
-    (err, res) => {
-      if (err) {
-        result(null, err);
-      }
-      else {
-        result(null, res);
-      }
-    });
-};
-
 Employee.newEmployee = function createEmployee(newEmployee, result) {
   sql.query("INSERT INTO Employee SET ?",
     newEmployee, (err, res) => {
