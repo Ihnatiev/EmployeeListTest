@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.bootstrap', 'ui.router', 'ngStorage', 'ngCookies'])
+var app = angular.module('app', ['ui.router', 'ngStorage', 'ngCookies'])
 .config(config);
 // .run(run);
 function config($stateProvider, $urlRouterProvider) {
@@ -33,17 +33,17 @@ function config($stateProvider, $urlRouterProvider) {
             });
     };
 
-//     function run($rootScope, $http, $location, $localStorage){
-//     if ($localStorage.currentUser) {
-//         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
-//     }
+    function run($rootScope, $http, $location, $localStorage){
+    if ($localStorage.currentUser) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
+    }
 
-//     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-//         var publicPages = ['/user/signup'];
-//         var restrictedPage = publicPages.indexOf($location.path()) === -1;
-//         if (restrictedPage && !$localStorage.currentUser) {
-//             $location.path('/user/login');
-//         }
-//     });
-// };
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        var publicPages = ['/user/signup'];
+        var restrictedPage = publicPages.indexOf($location.path()) === -1;
+        if (restrictedPage && !$localStorage.currentUser) {
+            $location.path('/user/login');
+        }
+    });
+};
 

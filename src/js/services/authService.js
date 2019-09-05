@@ -38,7 +38,7 @@
 
     function setUser(data) {
       Session.put('tokenId', data.token);
-      // Session.put('email', data.user.email);
+      Session.put('email', data.user.email);
 
     }
   }

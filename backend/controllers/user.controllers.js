@@ -7,7 +7,7 @@ exports.signup = (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.json({
       success: false,
-      message: 'Please pass name and password.'
+      message: 'Please pass email and password.'
     });
   } else {
     bcrypt.hash(req.body.password, 12).then(hash => {
@@ -20,7 +20,7 @@ exports.signup = (req, res) => {
           if (err) {
             return res.status(500).json({
               success: false,
-              message: 'Username already exists.'
+              message: 'Email already exists.'
             });
           }
           res.status(201).json({
@@ -38,8 +38,9 @@ exports.login = (req, res) => {
     function (error, results) {
       var data = JSON.stringify(results);
       var secret = 'this_secret_should_be_longer';
+      var jwtId = Math.random().toString(36).substring(7);
       var payload = {
-        audience: 'TEST',
+        jwtId: jwtId,
         data: data
       };
       if (error) {
