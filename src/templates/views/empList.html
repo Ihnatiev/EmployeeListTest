@@ -29,7 +29,7 @@
            <th class="text-center" style="width:25%">Department</th>
            <th></th>
          </tr>
-         <tr ng-repeat="emp in employees">
+         <tr ng-repeat="emp in employees | filter:search">
            <td>
              <button class="btn btn-info" ng-click="getEmployeeById(emp.empID)" title="View">
                <span class="glyphicon glyphicon-view"></span>View</button>
