@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'ngStorage', 'ngCookies'])
+var app = angular.module('app', ['ui.bootstrap', 'ui.router', 'ngStorage', 'ngCookies'])
 .config(config);
 // .run(run);
 function config($stateProvider, $urlRouterProvider) {

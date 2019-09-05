@@ -29,14 +29,14 @@
            <th class="text-center" style="width:25%">Department</th>
            <th></th>
          </tr>
-         <tr ng-repeat="emp in employees | filter: search">
+         <tr ng-repeat="emp in employees">
            <td>
              <button class="btn btn-info" ng-click="getEmployeeById(emp.empID)" title="View">
                <span class="glyphicon glyphicon-view"></span>View</button>
            </td>
            <td>
-             <button class="btn btn-warning" ng-click="editBtn(emp.empID)"
-               title="Edit"><span class="glyphicon glyphicon-edit"></span>Edit</button>
+             <button class="btn btn-warning" ng-click="editBtn(emp.empID)" title="Edit"><span
+                 class="glyphicon glyphicon-edit"></span>Edit</button>
            </td>
            <td class="text-center">{{emp.empID}}</td>
            <td class="text-center">{{emp.empName}}</td>
@@ -47,29 +47,15 @@
                  class="glyphicon glyphicon-trash"></span>Delete</button>
            </td>
          </tr>
-         <tfoot>
-           <tr>
-             <td align="center" colspan="7">
-               <span class="form-group pull-left page-size form-inline">
-                 <select id="addlPageSize" class="form-control control-color" ng-model="pageSizeSelected"
-                   ng-change="changePageSize()">
-                   <option value="5">5</option>
-                   <option value="10">10</option>
-                   <option value="25">25</option>
-                   <option value="50">50</option>
-                 </select>
-               </span>
-               <div class="pull-right">
-                 <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected"
-                   direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination"
-                   boundary-links="true" rotate="false" num-pages="numPages"></pagination>
-                 <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>
-               </div>
-             </td>
-           </tr>
-         </tfoot>
        </table>
      </div>
+   </div>
+   <div class="pagination">
+     <a ng-click="onPrevious()">&laquo;</a>
+     <a ng-click="onPrevious()">{{previousP+1}}</a>
+     <a class="active">{{currentPage+1}}</a>
+     <a ng-click="onNext()">{{nextP+1}}</a>
+     <a ng-click="onNext()">&raquo;</a>
    </div>
    <pop-up-dialog></pop-up-dialog>
    <emp-edit-dialog></emp-edit-dialog>

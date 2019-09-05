@@ -5,40 +5,59 @@ const connection = require('../config/connection');
 var queryAsync = Promise.promisify(connection.query.bind(connection));
 
 exports.getAllEmployees = (req, res) => {
-  var numRows;
-  var numPages;
+  // Employee.displayEmployees((err, employees) => {
+  //   if (err) {
+  //     res.status(500).json({
+  //       success: false,
+  //       message: 'Fetching employees failed!'
+  //     });
+  //   } else {
+  //     res.status(200).json({
+  //       success: true,
+  //       message: 'Employees fetched successfully!',
+  //       employees: employees
+  //     });
+  //   };
+  // });
+  var totalCount;
+  var totalPages;
   var numPerPage = parseInt(req.query.npp, 10) || 5;
   var page = parseInt(req.query.page, 10) || 0;
   var skip = page * numPerPage;
   var end_limit = numPerPage;
   var limit = skip + ',' + end_limit;
-  queryAsync('SELECT count(*) as numRows FROM Employee')
+  queryAsync('SELECT count(*) as totalCount FROM Employee')
     .then((results) => {
-      numRows = results[0].numRows;
-      numPages = Math.ceil(numRows / numPerPage);
+      totalCount = results[0].totalCount;
+      totalPages = Math.ceil(totalCount / numPerPage);
     })
     .then(() => queryAsync("SELECT empID, empName, IF(empActive, 'Yes', 'No')\
   empActive, dpName FROM Employee\
   INNER JOIN Department ON empDepartment = dpID  LIMIT " + limit))
     .then((results) => {
-      var responsePayload = {
-        results: results
+      let responsePayload = {
+        employees: results
       };
-      if (page < numPages) {
+      if (page < totalPages) {
         responsePayload.pagination = {
           previous: page > 0 ? page - 1 : undefined,
           current: page,
+          next: page < totalPages - 1 ? page + 1 : undefined,
           perPage: numPerPage,
-          next: page < numPages - 1 ? page + 1 : undefined
+          totalPages: totalPages,
+          totalItems: totalCount
         }
       }
       else responsePayload.pagination = {
-        err: 'queried page ' + page + ' is >= to maximum page number ' + numPages
+        err: 'queried page ' + page + ' is >= to maximum page number ' + totalPages
       }
       res.status(200).json(responsePayload);
     })
     .catch((err) => {
-      res.status(500).json({ err: err });
+      res.status(500).json({
+        success: false,
+        message: 'Server error'
+      });
     });
 };
 
