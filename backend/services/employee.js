@@ -3,7 +3,7 @@ const Employee = require('../models/employee.model');
 
 Employee.displayEmployees = function (employees, result) {
   sql.query("SELECT empID, empName, IF(empActive, 'Yes', 'No')\
-  empActive, dpName FROM Employee\
+  empActive, creator, dpName FROM Employee\
   INNER JOIN Department ON empDepartment = dpID", employees, (err, res) => {
     if (err) {
       result(err, null);
@@ -43,10 +43,10 @@ Employee.getEmpById = function getEmployee(employeeId, result) {
     });
 };
 
-Employee.updateEmpById= function updateEmployee(id, employee, result) {
+Employee.updateEmpById= function updateEmployee(id, creator, employee, result) {
   sql.query(
-    "UPDATE Employee SET ? where empID = ?",
-    [employee, id], (err, res) => {
+    "UPDATE Employee SET ? where empID = ? AND creator = ?",
+    [employee, id, creator], (err, res) => {
       if (err) {
         result(err, null);
       } else {
@@ -55,10 +55,10 @@ Employee.updateEmpById= function updateEmployee(id, employee, result) {
     });
 };
 
-Employee.removeEmpById = function removeEmployee(id, result) {
+Employee.removeEmpById = function removeEmployee(id, creator, result) {
   sql.query(
-    "DELETE FROM Employee WHERE empID = ?",
-    [id], (err, res) => {
+    "DELETE FROM Employee WHERE empID = ? AND creator = ?",
+    [id, creator], (err, res) => {
       if (err) {
         result(null, err);
       } else {

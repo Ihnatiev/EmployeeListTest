@@ -10,29 +10,36 @@ exports.signup = (req, res) => {
       message: 'Please pass email and password.'
     });
   } else {
-    bcrypt.hash(req.body.password, 12).then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      });
-      User.save(user,
-        err => {
-          if (err) {
-            return res.status(500).json({
-              success: false,
-              message: 'Email already exists.'
-            });
-          }
-          res.status(201).json({
-            success: true,
-            message: 'Successful created new user.'
-          });
+    try {
+      bcrypt.hash(req.body.password, 12).then(hash => {
+        const user = new User({
+          email: req.body.email,
+          password: hash
         });
-    });
+        User.save(user,
+          err => {
+            if (err) {
+              return res.status(500).json({
+                success: false,
+                message: 'Email already exists.'
+              });
+            }
+            res.status(201).json({
+              success: true,
+              message: 'Successful created new user.'
+            });
+          });
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Invalid authentication credentials!'
+      });
+    };
   };
 };
 
 exports.login = (req, res) => {
+  let fetchedUser;
   var password = req.body.password;
   User.find(req.body.email,
     function (error, results) {
@@ -43,6 +50,7 @@ exports.login = (req, res) => {
         jwtId: jwtId,
         data: data
       };
+      fetchedUser = results[0];
       if (error) {
         res.status(404).json({
           success: false,
@@ -57,14 +65,14 @@ exports.login = (req, res) => {
                 message: "Email and password does not match"
               });
             } else {
-              const token = jwt.sign(payload, secret, {
+              const token = jwt.sign({ userId: fetchedUser.id, email: fetchedUser.email }, secret, {
                 algorithm: 'HS256',
                 expiresIn: '1h'
               });
               res.status(200).json({
-                success: true,
-                message: "Successfully Login",
-                token: token
+                token: token,
+                expiresIn: 3600,
+                userId: fetchedUser.id
               });
             };
           });
@@ -78,3 +86,4 @@ exports.login = (req, res) => {
       }
     });
 };
+
