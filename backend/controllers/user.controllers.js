@@ -13,6 +13,7 @@ exports.signup = (req, res) => {
     try {
       bcrypt.hash(req.body.password, 12).then(hash => {
         const user = new User({
+          name: req.body.name,
           email: req.body.email,
           password: hash
         });
@@ -43,13 +44,7 @@ exports.login = (req, res) => {
   var password = req.body.password;
   User.find(req.body.email,
     function (error, results) {
-      var data = JSON.stringify(results);
       var secret = 'this_secret_should_be_longer';
-      var jwtId = Math.random().toString(36).substring(7);
-      var payload = {
-        jwtId: jwtId,
-        data: data
-      };
       fetchedUser = results[0];
       if (error) {
         res.status(404).json({
@@ -58,7 +53,7 @@ exports.login = (req, res) => {
         });
       } else {
         if (results.length > 0) {
-          bcrypt.compare(password, results[0].password, function (err, ress) {
+          bcrypt.compare(password, fetchedUser.password, function (err, ress) {
             if (!ress) {
               res.status(500).json({
                 success: false,
@@ -72,7 +67,8 @@ exports.login = (req, res) => {
               res.status(200).json({
                 token: token,
                 expiresIn: 3600,
-                userId: fetchedUser.id
+                userId: fetchedUser.id,
+                uName: fetchedUser.name
               });
             };
           });

@@ -32,7 +32,7 @@ connection.connect((err) => {
 });
 
 app.use("/api/employees", employeeRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/auth", userRoutes);
 
 
 module.exports = app;

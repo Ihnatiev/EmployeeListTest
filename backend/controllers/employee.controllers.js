@@ -6,7 +6,6 @@ var queryAsync = Promise.promisify(connection.query.bind(connection));
 
 exports.getAllEmployees = (req, res) => {
   var totalCount;
-  var totalPages;
   var numPerPage = +req.query.pagesize;
   var page = +req.query.page;
   var skip = page * numPerPage;
@@ -15,7 +14,6 @@ exports.getAllEmployees = (req, res) => {
   queryAsync('SELECT count(*) as totalCount FROM Employee')
     .then((results) => {
       totalCount = results[0].totalCount;
-      totalPages = Math.ceil(totalCount / numPerPage);
     })
     .then(() => queryAsync("SELECT empID, empName, creator, IF(empActive, 'Yes', 'No')\
     empActive, dpName FROM Employee\
@@ -25,19 +23,6 @@ exports.getAllEmployees = (req, res) => {
         employees: results,
         maxEmployees: totalCount
       };
-      if (page < totalPages) {
-        responsePayload.pagination = {
-          previous: page > 0 ? page - 1 : undefined,
-          current: page,
-          next: page < totalPages - 1 ? page + 1 : undefined,
-          perPage: numPerPage,
-          totalPages: totalPages,
-          maxEmployees: totalCount
-        }
-      }
-      else responsePayload.pagination = {
-        err: 'queried page ' + page + ' is >= to maximum page number ' + totalPages
-      }
       res.status(200).json(responsePayload);
     })
     .catch((err) => {
@@ -99,13 +84,19 @@ exports.updateEmployeeById = (req, res, next) => {
       creator: req.userData.userId
     }),
     (err, employee) => {
-      if (employee.affectedRows > 0) {
-        res.status(200).json({
-          message: 'Update successful!'
-        });
-      } else {
-        res.status(401).json({
-          message: 'Not authorizeted!'
+      try {
+        if (employee.affectedRows > 0) {
+          res.status(200).json({
+            message: 'Update successful!'
+          });
+        } else {
+          res.status(401).json({
+            message: 'Not authorized!'
+          });
+        }
+      } catch (error) {
+        res.status(500).json({
+          message: "Updating an employee failed!"
         });
       }
     });
@@ -115,13 +106,14 @@ exports.deleteEmployeeById = (req, res, next) => {
   Employee.removeEmpById(req.params.employeeId, req.userData.userId,
     (err, result) => {
       try {
+        console.log(result);
         if (result.affectedRows > 0) {
           res.status(200).json({
             message: 'Deletion successful!'
           });
         } else {
           res.status(401).json({
-            message: 'Not authorizeted!'
+            message: 'Not authorized!'
           });
         }
       } catch (error) {
