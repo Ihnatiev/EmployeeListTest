@@ -21,14 +21,18 @@ Employee.findAll = async function (limit) {
   return results;
 }
 
-Employee.create = function (employee) {
+Employee.create = function (employee, result) {
   sql.query("INSERT INTO Employee SET empName = ?, empActive = ?, empDepartment = ?, creator = ?",
     [
       employee.empName,
       employee.empActive,
       employee.empDepartment,
       employee.creator
-    ]);
+    ],
+    (err, res) => {
+      if (err) throw err;
+      result(res.insertId);
+    });
   return employee
 }
 

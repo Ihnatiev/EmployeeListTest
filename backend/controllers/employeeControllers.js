@@ -35,11 +35,13 @@ exports.createEmployee = (req, res) => {
     creator: req.userData.userId
   });
   try {
-    var result = Employee.create(employee);
-    return res.status(201).json({
+    Employee.create(employee,
+    result => {
+      return res.status(201).json({
       success: true,
       message: 'Employee added successfully!',
-      employee: result
+      employeeId: result
+    });
     });
   } catch (err) {
     res.status(500).json({
