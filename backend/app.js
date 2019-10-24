@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const connection = require('./config/connection');
-
 const employeeRoutes = require('./routes/employee.routes');
 const userRoutes = require('./routes/user.routes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./config/swagger.json');
 
 const app = express();
 
@@ -31,6 +32,7 @@ connection.connect((err) => {
   }
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/employees", employeeRoutes);
 app.use("/api/auth", userRoutes);
 

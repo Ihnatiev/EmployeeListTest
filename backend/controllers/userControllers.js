@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
-const User = require('../services/user');
+const secret = require('../config/secret');
+const User = require('../services/userService');
 
 exports.signup = (req, res) => {
   if (!req.body.email || !req.body.password) {
@@ -18,7 +18,7 @@ exports.signup = (req, res) => {
           password: hash
         });
         User.save(user,
-          err => {
+          (err, user) => {
             if (err) {
               return res.status(500).json({
                 success: false,
@@ -27,7 +27,8 @@ exports.signup = (req, res) => {
             }
             res.status(201).json({
               success: true,
-              message: 'Successful created new user.'
+              message: 'User created!',
+              userId: user
             });
           });
       });
@@ -44,7 +45,6 @@ exports.login = (req, res) => {
   var password = req.body.password;
   User.find(req.body.email,
     function (error, results) {
-      var secret = 'this_secret_should_be_longer';
       fetchedUser = results[0];
       if (error) {
         res.status(404).json({
@@ -60,7 +60,8 @@ exports.login = (req, res) => {
                 message: "Email and password does not match"
               });
             } else {
-              const token = jwt.sign({ userId: fetchedUser.id, email: fetchedUser.email }, secret, {
+              const token = jwt.sign({ userId: fetchedUser.id, email: fetchedUser.email },
+                secret.jwtSecret, {
                 algorithm: 'HS256',
                 expiresIn: '1h'
               });
@@ -68,7 +69,7 @@ exports.login = (req, res) => {
                 token: token,
                 expiresIn: 3600,
                 userId: fetchedUser.id,
-                uName: fetchedUser.name
+                userName: fetchedUser.name
               });
             };
           });

@@ -1,5 +1,6 @@
 const app = require("./backend/app");
-const http = require("http");
+const fs = require('fs');
+const https = require("https");
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -39,7 +40,12 @@ const onError = error => {
 const port = normalizePort(process.env.PORT || "3002");
 app.set("port", port);
 
-const server = http.createServer(app);
+const httpsOptions = {
+  key: fs.readFileSync('./backend/config/key.pem'),
+  cert: fs.readFileSync('./backend/config/cert.pem')
+};
+
+const server = https.createServer(httpsOptions, app);
 server.on("error", onError);
 server.listen(port, () => {
   console.log('Server started on the port ' + port);

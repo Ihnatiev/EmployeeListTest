@@ -1,4 +1,3 @@
-
 const Employee = function (emp) {
   this.empName = emp.empName;
   this.empActive = emp.empActive;

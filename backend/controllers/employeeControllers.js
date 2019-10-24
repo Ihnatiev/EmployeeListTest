@@ -1,29 +1,23 @@
-const Employee = require('../services/employee');
-const Promise = require('bluebird');
-const connection = require('../config/connection');
-
-var queryAsync = Promise.promisify(connection.query.bind(connection));
+const EmployeeService = require('../services/employeeService');
+const Employee = require('../models/employee.model');
 
 exports.getAllEmployees = (req, res) => {
-  var totalCount;
+  let totalCount;
   var numPerPage = +req.query.pagesize;
   var page = +req.query.page;
   var skip = page * numPerPage;
   var end_limit = numPerPage;
   var limit = skip + ',' + end_limit;
-  queryAsync('SELECT count(*) as totalCount FROM Employee')
-    .then((results) => {
-      totalCount = results[0].totalCount;
+  EmployeeService.findCount()
+    .then((result) => {
+      totalCount = result[0].totalCount;
     })
-    .then(() => queryAsync("SELECT empID, empName, creator, IF(empActive, 'Yes', 'No')\
-    empActive, dpName FROM Employee\
-    INNER JOIN Department ON empDepartment = dpID LIMIT " + limit))
-    .then((results) => {
-      let responsePayload = {
+    .then(async () => {
+      var results = await EmployeeService.findAll(limit);
+      return res.status(200).json({
         employees: results,
         maxEmployees: totalCount
-      };
-      res.status(200).json(responsePayload);
+      });
     })
     .catch((err) => {
       res.status(500).json({
@@ -31,35 +25,33 @@ exports.getAllEmployees = (req, res) => {
         message: 'Server error'
       });
     });
+}
 
-};
-
-exports.createAnEmployee = (req, res) => {
-  var newEmp = new Employee({
+exports.createEmployee = (req, res) => {
+  var employee = new Employee({
     empName: req.body.empName,
     empActive: req.body.empActive,
     empDepartment: req.body.empDepartment,
     creator: req.userData.userId
   });
-  Employee.newEmployee(newEmp,
-    (err, employee) => {
-      if (err) {
-        res.status(500).json({
-          success: false,
-          message: 'Adding employee failed!'
-        });
-      } else {
-        res.status(201).json({
-          success: true,
-          message: 'Employee added successfully!',
-          employee: employee
-        });
-      };
+  try {
+    var result = Employee.create(employee);
+    return res.status(201).json({
+      success: true,
+      message: 'Employee added successfully!',
+      employee: result
     });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Adding employee failed!'
+    });
+  };
 };
 
 exports.getEmployeeById = (req, res) => {
-  Employee.getEmpById(req.params.employeeId,
+  var empID = req.params.employeeId;
+  EmployeeService.find(empID,
     (err, employee) => {
       if (err) {
         res.status(404).json({
@@ -73,15 +65,17 @@ exports.getEmployeeById = (req, res) => {
         });
       };
     });
-};
+}
 
 exports.updateEmployeeById = (req, res, next) => {
-  Employee.updateEmpById(req.params.employeeId, req.userData.userId,
+  var empID = req.params.employeeId;
+  var userId = req.userData.userId;
+  EmployeeService.update(empID, userId,
     new Employee({
       empName: req.body.empName,
       empActive: req.body.empActive,
       empDepartment: req.body.empDepartment,
-      creator: req.userData.userId
+      creator: userId
     }),
     (err, employee) => {
       try {
@@ -100,13 +94,14 @@ exports.updateEmployeeById = (req, res, next) => {
         });
       }
     });
-};
+}
 
 exports.deleteEmployeeById = (req, res, next) => {
-  Employee.removeEmpById(req.params.employeeId, req.userData.userId,
+  var empID = req.params.employeeId;
+  var userId = req.userData.userId;
+  EmployeeService.delete(empID, userId,
     (err, result) => {
       try {
-        console.log(result);
         if (result.affectedRows > 0) {
           res.status(200).json({
             message: 'Deletion successful!'
@@ -122,5 +117,5 @@ exports.deleteEmployeeById = (req, res, next) => {
         });
       }
     });
-};
+}
 

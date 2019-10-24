@@ -8,7 +8,7 @@ User.save = function signup(user, result) {
         result(err, null);
       }
       else {
-        result(null, res);
+        result(null, res.insertId);
       }
     });
 };

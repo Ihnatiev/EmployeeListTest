@@ -1,0 +1,430 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger EmployeeList"
+  },
+  "host": "localhost:3002",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "employees",
+      "description": "Everything about employee"
+    },
+    {
+      "name": "user",
+      "description": "Everything about user"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "oauth2": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey"
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/employees?pagesize={pagesize}&page={page}": {
+      "get": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Returns a list of employees",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pagesize",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Quantity of employees on the one page"
+          },
+          {
+            "in": "path",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "On what page (numbering starts from 0)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Employees not found"
+          }
+        }
+      }
+    },
+    "/employees": {
+      "post": {
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "tags": [
+          "employees"
+        ],
+        "summary": "Add a new employee to the list",
+        "operationId": "createEmployee",
+        "consumes": "application/json",
+        "produces": "application/json",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Employee object that needs to be added to the list",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "empName": {
+                  "type": "string"
+                },
+                "empActive": {
+                  "type": "boolean"
+                },
+                "empDepartment": {
+                  "type": "integer"
+                }
+              },
+              "example": {
+                "empName": "Uncle Bob",
+                "empActive": 1,
+                "empDepartment": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "You are not authenticated"
+          },
+          "405": {
+            "description": "Invalid input"
+          },
+          "UnauthorizedError": {
+            "description": "Access token is missing or invalid"
+          }
+        }
+      }
+    },
+    "/employees/{employeeId}": {
+      "get": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Find employee by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "employeeId",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "tags": [
+          "employees"
+        ],
+        "summary": "Update an existing employee",
+        "operationId": "updateEmployee",
+        "consumes": "application/json",
+        "produces": "application/json",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "employeeId",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Employee object that needs to be updated in the list",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "empName": {
+                  "type": "string"
+                },
+                "empActive": {
+                  "type": "boolean"
+                },
+                "empDepartment": {
+                  "type": "integer"
+                }
+              },
+              "example": {
+                "empName": "Uncle Bob",
+                "empActive": 1,
+                "empDepartment": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "405": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "oauth2": []
+          }
+        ],
+        "tags": [
+          "employees"
+        ],
+        "summary": "Deletes an employee",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "employeeId",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "Numeric ID of the employee."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "content": {
+          "application/x-www-form-urlencoded": {}
+        },
+        "operationId": "signupUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "name": "Uncle Bob",
+                "email": "bob@test.com",
+                "password": "test1234"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Logs user into the system",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "email": "bob@test.com",
+                "password": "test1234"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            },
+            "headers": {
+              "X-Rate-Limit": {
+                "type": "integer",
+                "format": "int32",
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "username",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Employee": {
+      "type": "object",
+      "required": [
+        "name",
+        "active",
+        "department"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "department": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "creator": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    }
+  }
+}
