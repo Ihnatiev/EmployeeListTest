@@ -28,11 +28,10 @@ const res = mockResponse();
 describe('USER SIGNUP', () => {
   describe('test body request', () => {
     test('should return status 400 if name is missing from body', () => {
-      const req = mockRequest(
+      var req = mockRequest(
         {},
         { email: 'boss@mail.com', password: 'boss' }
       );
-      const res = mockResponse();
       controller.signup(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
@@ -41,11 +40,10 @@ describe('USER SIGNUP', () => {
       });
     });
     test('should return status 400 if email is missing from body', () => {
-      const req = mockRequest(
+      var req = mockRequest(
         {},
         { name: 'Bob', password: 'boss' }
       );
-      const res = mockResponse();
       controller.signup(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
@@ -54,11 +52,10 @@ describe('USER SIGNUP', () => {
       });
     });
     test('should return status 400 if password is missing from body', () => {
-      const req = mockRequest(
+      var req = mockRequest(
         {},
         { name: 'Bob', email: 'boss@mail.com' }
       );
-      const res = mockResponse();
       controller.signup(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
