@@ -1,19 +1,14 @@
-const express = require('express');
-const router = express.Router();
-
+const router = require('express').Router();
 const EmployeeController = require('../controllers/employeeControllers');
-
 const checkAuth = require('../middleware/check-auth');
 
-router.get('/', EmployeeController.getAllEmployees);
+router.route('/')
+  .get(EmployeeController.getAllEmployees)
+  .post(checkAuth, EmployeeController.createEmployee);
 
-router.post('/', checkAuth, EmployeeController.createEmployee);
-
-router.get('/:employeeId', EmployeeController.getEmployeeById);
-
-router.put('/:employeeId', checkAuth, EmployeeController.updateEmployeeById);
-
-router.delete('/:employeeId', checkAuth, EmployeeController.deleteEmployeeById);
-
+router.route('/:employeeId')
+  .get(EmployeeController.getEmployeeById)
+  .put(checkAuth, EmployeeController.updateEmployeeById)
+  .delete(checkAuth, EmployeeController.deleteEmployeeById);
 
 module.exports = router;

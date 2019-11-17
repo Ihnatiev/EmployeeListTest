@@ -1,8 +1,8 @@
 const sql = require('../config/connection');
-const User = require('../models/user.model');
+const UserModel = require('../models/user.model');
 
-User.save = function signup(user, result) {
-  sql.query("INSERT INTO Users SET ?", user,
+UserModel.save = function signup(userId, result) {
+  sql.query("INSERT INTO Users SET ?", userId,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -11,9 +11,10 @@ User.save = function signup(user, result) {
         result(null, res.insertId);
       }
     });
+  //return result(null, 2);
 };
 
-User.find = function login(email, result) {
+UserModel.find = function login(email, result) {
   sql.query("SELECT * FROM Users WHERE email = ?", [email],
     (err, res) => {
       if (err) {
@@ -25,4 +26,5 @@ User.find = function login(email, result) {
     });
 };
 
-module.exports = User;
+module.exports = UserModel;
+

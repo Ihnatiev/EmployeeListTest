@@ -5,12 +5,17 @@ const Employee = require('../models/employee.model');
 
 var queryAsync = Promise.promisify(connection.query.bind(connection));
 
-Employee.findCount = async function () {
+Employee.getCount = async function () {
   var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
   return result;
 }
 
-Employee.findAll = async function (limit) {
+Employee.findAll = async function (numPerPage, page) {
+
+  var skip = page * numPerPage;
+  var end_limit = numPerPage;
+  var limit = skip + ',' + end_limit;
+
   var queryResults = queryAsync("SELECT empID, empName, creator, IF(empActive, 'Yes', 'No')\
     empActive, dpName FROM Employee\
     INNER JOIN Department ON empDepartment = dpID LIMIT " + limit)
@@ -22,7 +27,8 @@ Employee.findAll = async function (limit) {
 }
 
 Employee.create = function (employee, result) {
-  sql.query("INSERT INTO Employee SET empName = ?, empActive = ?, empDepartment = ?, creator = ?",
+  sql.query("INSERT INTO Employee SET empName = ?,\
+  empActive = ?, empDepartment = ?, creator = ?",
     [
       employee.empName,
       employee.empActive,
@@ -36,21 +42,15 @@ Employee.create = function (employee, result) {
   return employee
 }
 
-Employee.find = function (employeeId, result) {
-  sql.query(
+Employee.find = async function (employeeId) {
+  var result = queryAsync(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
     empActive, dpName FROM Employee\
     INNER JOIN Department\
     ON empDepartment = dpID WHERE empID = ? ",
-    employeeId, (err, res) => {
-      if (err) {
-        result(err, null);
-      }
-      else {
-        result(null, res);
-      }
-    });
+    employeeId);
+  return result;
 }
 
 Employee.update = function (id, creator, employee, result) {
