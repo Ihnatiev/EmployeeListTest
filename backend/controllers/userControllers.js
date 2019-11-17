@@ -46,16 +46,11 @@ module.exports = {
     let fetchedUser;
     var password = req.body.password;
     UserService.find(req.body.email,
-      function (error, results) {
+      (error, results) => {
         fetchedUser = results[0];
-        if (error) {
-          res.status(500).json({
-            success: false,
-            message: 'There are some error with query'
-          });
-        } else {
-          if (results.length > 0) {
-            bcrypt.compare(password, fetchedUser.password, function (err, ress) {
+        if (results.length > 0) {
+          bcrypt.compare(password, fetchedUser.password,
+            (ress) => {
               if (!ress) {
                 res.status(401).json({
                   success: false,
@@ -75,13 +70,11 @@ module.exports = {
                 });
               };
             });
-          }
-          else {
-            res.status(404).json({
-              success: false,
-              message: "Authentication failed. User not found."
-            });
-          }
+        } else {
+          res.status(404).json({
+            success: false,
+            message: "Authentication failed. User not found."
+          });
         }
       });
   }
