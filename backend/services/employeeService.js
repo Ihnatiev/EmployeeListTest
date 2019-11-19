@@ -1,16 +1,28 @@
 const sql = require('../config/connection');
 const Promise = require('bluebird');
 const connection = require('../config/connection');
-const Employee = require('../models/employee.model');
+const EmployeeModel = require('../models/employee.model');
 
 var queryAsync = Promise.promisify(connection.query.bind(connection));
 
-Employee.getCount = async function () {
-  var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
-  return result;
+// EmployeeModel.getCount = async function () {
+//   var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
+//   return result;
+// }
+
+EmployeeModel.getCount = async function (result) {
+  sql.query("SELECT count(*) as totalCount FROM Employee",
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
+      }
+    });
 }
 
-Employee.findAll = async function (numPerPage, page) {
+EmployeeModel.findAll = async function (numPerPage, page) {
 
   var skip = page * numPerPage;
   var end_limit = numPerPage;
@@ -22,11 +34,11 @@ Employee.findAll = async function (numPerPage, page) {
   let results = [];
   results = queryResults.map(m => {
     return m;
-  });
+  })
   return results;
 }
 
-Employee.create = function (employee, result) {
+EmployeeModel.create = function (employee, result) {
   sql.query("INSERT INTO Employee SET empName = ?,\
   empActive = ?, empDepartment = ?, creator = ?",
     [
@@ -36,27 +48,37 @@ Employee.create = function (employee, result) {
       employee.creator
     ],
     (err, res) => {
-      if (err) throw err;
-      result(res.insertId);
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res.insertId);
+      }
     });
-  return employee
+  //return employee
 }
 
-Employee.find = async function (employeeId) {
-  var result = queryAsync(
+EmployeeModel.find = function (employeeId, result) {
+  sql.query(
     "SELECT empID, empName,\
     IF(empActive, 'Yes', 'No')\
     empActive, dpName FROM Employee\
     INNER JOIN Department\
-    ON empDepartment = dpID WHERE empID = ? ",
-    employeeId);
-  return result;
+    ON empDepartment = dpID WHERE empID = ? ", employeeId,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+      }
+      else {
+        result(null, res);
+      }
+    });
 }
 
-Employee.update = function (id, creator, employee, result) {
+EmployeeModel.update = function (employeeId, userId, employee, result) {
   sql.query(
     "UPDATE Employee SET ? where empID = ? AND creator = ?",
-    [employee, id, creator], (err, res) => {
+    [employee, employeeId, userId], (err, res) => {
       if (err) {
         result(err, null);
       } else {
@@ -65,10 +87,10 @@ Employee.update = function (id, creator, employee, result) {
     });
 }
 
-Employee.delete = function (id, creator, result) {
+EmployeeModel.delete = function (employeeId, creator, result) {
   sql.query(
     "DELETE FROM Employee WHERE empID = ? AND creator = ?",
-    [id, creator], (err, res) => {
+    [employeeId, creator], (err, res) => {
       if (err) {
         result(null, err);
       } else {
@@ -77,4 +99,4 @@ Employee.delete = function (id, creator, result) {
     });
 }
 
-module.exports = Employee;
+module.exports = EmployeeModel;
