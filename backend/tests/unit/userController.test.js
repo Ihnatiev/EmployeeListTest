@@ -156,7 +156,7 @@ describe('USER LOGIN', () => {
   });
   test('should return Email and password does not match', () => {
     beforeEach(() => {
-      jest.restoreAllMocks()
+      jest.clearAllMocks()
     });
     const req = mockRequest(
       {
@@ -193,7 +193,7 @@ describe('USER LOGIN', () => {
   });
   test('should return User authenticated', async () => {
     beforeEach(() => {
-      jest.restoreAllMocks()
+      jest.clearAllMocks()
     });
 
     const req = mockRequest(
