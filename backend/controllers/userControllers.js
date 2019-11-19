@@ -28,7 +28,7 @@ module.exports = {
                 error: err.code
               });
             }
-            res.status(201).json({
+            return res.status(201).json({
               success: true,
               message: 'User created!',
               userId: userId
@@ -44,25 +44,29 @@ module.exports = {
 
   login: (req, res) => {
     let fetchedUser;
+    var email = req.body.email;
     var password = req.body.password;
-    UserService.find(req.body.email,
-      (error, results) => {
-        fetchedUser = results[0];
-        if (results.length > 0) {
+    UserService.find(email,
+      (error, user) => {
+        fetchedUser = user[0];
+        if (user.length > 0) {
           bcrypt.compare(password, fetchedUser.password,
-            (ress) => {
-              if (!ress) {
-                res.status(401).json({
+            (err, result) => {
+              if (!result || err) {
+                return res.status(401).json({
                   success: false,
                   message: "Email and password does not match"
                 });
               } else {
-                const token = jwt.sign({ userId: fetchedUser.id, email: fetchedUser.email },
+                const token = jwt.sign({
+                  userId: fetchedUser.id,
+                  email: fetchedUser.email
+                },
                   secret.jwtSecret, {
                   algorithm: 'HS256',
                   expiresIn: '1h'
                 });
-                res.status(200).json({
+                return res.status(200).json({
                   token: token,
                   expiresIn: 3600,
                   userId: fetchedUser.id,
@@ -71,12 +75,13 @@ module.exports = {
               };
             });
         } else {
-          res.status(404).json({
+          res.status(500).json({
             success: false,
-            message: "Authentication failed. User not found."
+            message: "Authentication failed"
           });
-        }
-      });
+        };
+      }
+    );
   }
-}
+};
 
