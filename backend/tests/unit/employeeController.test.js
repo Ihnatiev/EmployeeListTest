@@ -42,6 +42,7 @@ describe("EmployeeController", () => {
         }];
 
         controller.getEmployeeById(req, res);
+
         expect(spyFind).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
@@ -64,6 +65,7 @@ describe("EmployeeController", () => {
         });
 
         controller.getEmployeeById(req, res);
+
         expect(spyFind).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({
@@ -80,6 +82,7 @@ describe("EmployeeController", () => {
         const res = mockResponse();
 
         controller.getEmployeeById(req, res);
+
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
           success: false,
@@ -103,6 +106,7 @@ describe("EmployeeController", () => {
           return result(null, { affectedRows: 1 });
         });
         controller.updateEmployeeById(req, res);
+
         expect(spyUpdate).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
@@ -125,7 +129,9 @@ describe("EmployeeController", () => {
         const spyUpdate = jest.spyOn(service, "update").mockImplementation((employeeId, userId, employee, result) => {
           return result(null, { affectedRows: 0 });
         });
+
         controller.updateEmployeeById(req, res);
+
         expect(spyUpdate).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({
@@ -148,7 +154,9 @@ describe("EmployeeController", () => {
         const spyUpdate = jest.spyOn(service, "update").mockImplementation((employeeId, userId, employee, result) => {
           return result(null);
         });
+
         controller.updateEmployeeById(req, res);
+
         expect(spyUpdate).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
@@ -158,6 +166,7 @@ describe("EmployeeController", () => {
         spyUpdate.mockClear();
       });
     });
+
     describe("Delete request / response test", () => {
       test("should delete an employee", () => {
         const mockRequest = (params, userData) => ({
@@ -169,7 +178,9 @@ describe("EmployeeController", () => {
         const spyDelete = jest.spyOn(service, "delete").mockImplementation((employeeId, creator, result) => {
           return result(null, { affectedRows: 1 });
         });
+
         controller.deleteEmployeeById(req, res);
+
         expect(spyDelete).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
@@ -188,7 +199,9 @@ describe("EmployeeController", () => {
         const spyDelete = jest.spyOn(service, "delete").mockImplementation((employeeId, creator, result) => {
           return result(null, { affectedRows: 0 });
         });
+
         controller.deleteEmployeeById(req, res);
+
         expect(spyDelete).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({
@@ -207,7 +220,9 @@ describe("EmployeeController", () => {
         const spyDelete = jest.spyOn(service, "delete").mockImplementation((employeeId, creator, result) => {
           return result(null);
         });
+
         controller.deleteEmployeeById(req, res);
+
         expect(spyDelete).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
@@ -218,6 +233,7 @@ describe("EmployeeController", () => {
       });
     });
   });
+
   describe("Requests by /employees", () => {
     describe("Post request / response test", () => {
       test("should create new employee", () => {
@@ -292,6 +308,7 @@ describe("EmployeeController", () => {
         spyCreate.mockClear();
       });
     });
+
     describe("Get request / response test", () => {
       test("should get all employees", async () => {
         const mockRequest = (query) => ({ query });
@@ -302,21 +319,85 @@ describe("EmployeeController", () => {
           return ([{ totalCount: 2 }])
         });
 
-        const findAll = jest.spyOn(service, "findAll").mockImplementation((numPerPage, page) => {
-          return results([{
+        const findAll = jest.spyOn(service, "findAll").mockImplementation(() => {
+          return ([{
             empID: 295,
             empName: "Max",
             creator: "18664512",
             empActive: "Yes",
             dpName: "Finance"
-          }], {maxEmployees: 6});
+          }]);
+        });
+
+        const expectedEmployee = [{
+          empID: 295,
+          empName: "Max",
+          creator: "18664512",
+          empActive: "Yes",
+          dpName: "Finance"
+        }];
+
+        await controller.getAllEmployees(req, res);
+
+        expect(getCount).toHaveBeenCalledTimes(1);
+        expect(findAll).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+          employees: expectedEmployee,
+          maxEmployees: 2
+        });
+        getCount.mockClear();
+        findAll.mockClear();
+      });
+      test("should return status 404", async () => {
+        const mockRequest = (query) => ({ query });
+        const req = mockRequest({ pagesize: 3, page: 0 });
+        const res = mockResponse();
+
+        const getCount = jest.spyOn(service, "getCount").mockImplementation(() => {
+          return ([{ totalCount: 0 }])
+        });
+
+        const findAll = jest.spyOn(service, "findAll").mockImplementation(() => {
+          return ([]);
         });
 
         await controller.getAllEmployees(req, res);
+
         expect(getCount).toHaveBeenCalledTimes(1);
         expect(findAll).toHaveBeenCalledTimes(1);
-        // getCount.mockClear();
-        // findAll.mockClear();
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith({
+          success: false,
+          message: 'Employee not found'
+        })
+        getCount.mockClear();
+        findAll.mockClear();
+      });
+      test("should return status 500", async () => {
+        const mockRequest = (query) => ({ query });
+        const req = mockRequest();
+        const res = mockResponse();
+
+        const getCount = jest.spyOn(service, "getCount").mockImplementation(() => {
+          return ([])
+        });
+
+        const findAll = jest.spyOn(service, "findAll").mockImplementation(() => {
+          return ([]);
+        });
+
+        await controller.getAllEmployees(req, res);
+
+        expect(getCount).toHaveBeenCalledTimes(0);
+        expect(findAll).toHaveBeenCalledTimes(0);
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+          success: false,
+          message: 'Server error'
+        })
+        getCount.mockClear();
+        findAll.mockClear();
       });
     });
   });
