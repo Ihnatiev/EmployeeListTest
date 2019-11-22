@@ -51,7 +51,6 @@ module.exports = {
         fetchedUser = user[0];
         if (user.length > 0) {
           const result = await bcrypt.compare(password, fetchedUser.password);
-          //(err, result) => {
           if (!result) {
             res.status(401).json({
               success: false,
@@ -73,7 +72,6 @@ module.exports = {
               userName: fetchedUser.name
             });
           };
-          //});
         } else {
           res.status(500).json({
             success: false,
