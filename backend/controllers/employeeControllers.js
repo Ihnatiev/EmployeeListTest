@@ -27,27 +27,32 @@ module.exports = {
   },
 
   getAllEmployees: async (req, res) => {
-    let totalEmployee;
-    var numPerPage = +req.query.pagesize;
-    var page = +req.query.page;
+    try {
+      let totalEmployee;
+      var numPerPage = +req.query.pagesize;
+      var page = +req.query.page;
+      
+      var count = await EmployeeService.getCount();
+      var results = await EmployeeService.findAll(numPerPage, page);
 
-    EmployeeService.getCount()
-      .then((result) => {
-        totalEmployee = result[0].totalCount;
-      })
-      .then(async () => {
-        var results = await EmployeeService.findAll(numPerPage, page);
-        return res.status(200).json({
+      if (count[0].totalCount === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'Employee not found'
+        });
+      } else if (count && results) {
+        totalEmployee = count[0].totalCount;
+        res.status(200).json({
           employees: results,
           maxEmployees: totalEmployee
         });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: 'Server error'
-        });
+      };
+    } catch {
+      res.status(500).json({
+        success: false,
+        message: 'Server error'
       });
+    };
   },
 
   createEmployee: (req, res) => {
