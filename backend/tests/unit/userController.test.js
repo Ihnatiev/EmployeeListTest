@@ -1,5 +1,4 @@
 jest.mock('../../services/userService');
-const bcrypt = require('bcrypt');
 const controller = require('../../controllers/userControllers');
 const service = require('../../services/userService');
 
@@ -14,6 +13,7 @@ const mockResponse = () => {
   res.json = jest.fn().mockReturnValue(res);
   return res;
 };
+
 describe('UserController', () => {
   describe('SignUp', () => {
     describe('test body request', () => {
