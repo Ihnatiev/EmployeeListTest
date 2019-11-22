@@ -37,7 +37,7 @@ const onError = error => {
   }
 };
 
-const port = normalizePort(process.env.PORT || "3002");
+const port = normalizePort(process.env.PORT || "8888");
 app.set("port", port);
 
 const httpsOptions = {
@@ -48,5 +48,5 @@ const httpsOptions = {
 const server = https.createServer(httpsOptions, app);
 server.on("error", onError);
 server.listen(port, () => {
-  console.log('Server started on the port ' + port);
+  console.log(`Server is running https://localhost:${port}...`);
 });

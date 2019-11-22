@@ -5,22 +5,22 @@ const EmployeeModel = require('../models/employee.model');
 
 var queryAsync = Promise.promisify(connection.query.bind(connection));
 
-// EmployeeModel.getCount = async function () {
-//   var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
-//   return result;
-// }
-
-EmployeeModel.getCount = async function (result) {
-  sql.query("SELECT count(*) as totalCount FROM Employee",
-    (err, res) => {
-      if (err) {
-        result(err, null);
-      }
-      else {
-        result(null, res);
-      }
-    });
+EmployeeModel.getCount = async function () {
+  var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
+  return result;
 }
+
+// EmployeeModel.getCount = async function (result) {
+//   sql.query("SELECT count(*) as totalCount FROM Employee",
+//     (err, res) => {
+//       if (err) {
+//         result(err, null);
+//       }
+//       else {
+//         result(null, res);
+//       }
+//     });
+// }
 
 EmployeeModel.findAll = async function (numPerPage, page) {
 
@@ -28,13 +28,14 @@ EmployeeModel.findAll = async function (numPerPage, page) {
   var end_limit = numPerPage;
   var limit = skip + ',' + end_limit;
 
-  var queryResults = queryAsync("SELECT empID, empName, creator, IF(empActive, 'Yes', 'No')\
+  var queryResults = queryAsync("SELECT empID, empName, creator,\
+    IF(empActive, 'Yes', 'No')\
     empActive, dpName FROM Employee\
     INNER JOIN Department ON empDepartment = dpID LIMIT " + limit)
   let results = [];
   results = queryResults.map(m => {
     return m;
-  })
+  });
   return results;
 }
 

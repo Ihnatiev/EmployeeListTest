@@ -42,42 +42,42 @@ module.exports = {
     };
   },
 
-  login: (req, res) => {
+  login: async (req, res) => {
     let fetchedUser;
     var email = req.body.email;
     var password = req.body.password;
-    UserService.find(email,
-      (error, user) => {
+    await UserService.find(email,
+      async (error, user) => {
         fetchedUser = user[0];
         if (user.length > 0) {
-          bcrypt.compare(password, fetchedUser.password,
-            (err, result) => {
-              if (!result || err) {
-                return res.status(401).json({
-                  success: false,
-                  message: "Email and password does not match"
-                });
-              } else {
-                const token = jwt.sign({
-                  userId: fetchedUser.id,
-                  email: fetchedUser.email
-                },
-                  secret.jwtSecret, {
-                  algorithm: 'HS256',
-                  expiresIn: '1h'
-                });
-                return res.status(200).json({
-                  token: token,
-                  expiresIn: 3600,
-                  userId: fetchedUser.id,
-                  userName: fetchedUser.name
-                });
-              };
+          const result = await bcrypt.compare(password, fetchedUser.password);
+          //(err, result) => {
+          if (!result) {
+            res.status(401).json({
+              success: false,
+              message: 'Email and password does not match'
             });
+          } else {
+            const token = jwt.sign({
+              userId: fetchedUser.id,
+              email: fetchedUser.email
+            },
+              secret.jwtSecret, {
+              algorithm: 'HS256',
+              expiresIn: '1h'
+            });
+            return res.status(200).json({
+              token: token,
+              expiresIn: 3600,
+              userId: fetchedUser.id,
+              userName: fetchedUser.name
+            });
+          };
+          //});
         } else {
           res.status(500).json({
             success: false,
-            message: "Authentication failed"
+            message: "Authentication failed."
           });
         };
       }

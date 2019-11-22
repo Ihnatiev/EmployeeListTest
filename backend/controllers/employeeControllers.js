@@ -27,24 +27,27 @@ module.exports = {
   },
 
   getAllEmployees: async (req, res) => {
-    let totalCount;
+    let totalEmployee;
     var numPerPage = +req.query.pagesize;
     var page = +req.query.page;
 
-    EmployeeService.getCount((err, result) => {
-      totalCount = result[0].totalCount;
-    }).then(async () => {
-      var results = await EmployeeService.findAll(numPerPage, page);
-      return res.status(200).json({
-        employees: results,
-        maxEmployees: totalCount
+    EmployeeService.getCount()
+      .then((result) => {
+        totalEmployee = result[0].totalCount;
+      })
+      .then(async () => {
+        var results = await EmployeeService.findAll(numPerPage, page);
+        return res.status(200).json({
+          employees: results,
+          maxEmployees: totalEmployee
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: 'Server error'
+        });
       });
-    }).catch((err) => {
-      res.status(500).json({
-        success: false,
-        message: 'Server error'
-      });
-    });
   },
 
   createEmployee: (req, res) => {

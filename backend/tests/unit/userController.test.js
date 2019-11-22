@@ -4,12 +4,13 @@ const controller = require('../../controllers/userControllers');
 const service = require('../../services/userService');
 
 const mockRequest = (body) => ({
-  body,
+  body
 });
 
 const mockResponse = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
+  res.sendStatus = jest.fn().mockReturnValue(res);
   res.json = jest.fn().mockReturnValue(res);
   return res;
 };
@@ -21,7 +22,9 @@ describe('UserController', () => {
           { email: 'boss@mail.com', password: 'boss' }
         );
         const res = mockResponse();
+
         controller.signup(req, res);
+
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
           success: false,
@@ -33,7 +36,9 @@ describe('UserController', () => {
           { name: 'Bob', password: 'boss' }
         );
         const res = mockResponse();
+
         controller.signup(req, res);
+
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
           success: false,
@@ -45,7 +50,9 @@ describe('UserController', () => {
           { name: 'Bob', email: 'boss@mail.com' }
         );
         const res = mockResponse();
+
         controller.signup(req, res);
+
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
           success: false,
@@ -69,20 +76,21 @@ describe('UserController', () => {
           password: expect.anything()
         };
 
-        jest.spyOn(service, "save").mockImplementation((err, result) => {
+        const spySave = jest.spyOn(service, "save").mockImplementation((err, result) => {
           return result(null, 2);
         });
 
         await controller.signup(req, res);
 
-        expect(service.save).toHaveBeenCalledTimes(1);
-        expect(service.save).toBeCalledWith(expectedUser, expect.anything());
+        expect(spySave).toHaveBeenCalledTimes(1);
+        expect(spySave).toBeCalledWith(expectedUser, expect.anything());
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.json).toHaveBeenCalledWith({
           success: true,
           message: 'User created!',
           userId: 2
         });
+        spySave.mockClear();
       });
 
       test('should return status 500 if error from database', async () => {
@@ -95,17 +103,19 @@ describe('UserController', () => {
         );
         const res = mockResponse();
 
-        jest.spyOn(service, "save").mockImplementation((err, result) => {
+        const spySave = jest.spyOn(service, "save").mockImplementation((err, result) => {
           return result(err, null);
         });
 
         await controller.signup(req, res);
 
+        expect(spySave).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
           success: false,
           message: 'Database error'
         });
+        spySave.mockClear();
       });
 
       test('should return status 500 if error from server', async () => {
@@ -118,16 +128,18 @@ describe('UserController', () => {
         );
         const res = mockResponse();
 
-        jest.spyOn(service, "save").mockImplementation((result) => {
+        const spySave = jest.spyOn(service, "save").mockImplementation((result) => {
           return result();
         });
 
         await controller.signup(req, res);
 
+        expect(spySave).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
           message: 'Invalid authentication credentials!'
         });
+        spySave.mockClear();
       });
     });
   });
@@ -142,97 +154,83 @@ describe('UserController', () => {
       );
       const res = mockResponse();
 
-      jest.spyOn(service, "find").mockImplementation((error, result) => {
+      const spyFind = jest.spyOn(service, "find").mockImplementation((error, result) => {
         return result(error, []);
       });
 
       controller.login(req, res);
-      expect(service.find).toHaveBeenCalledTimes(1);
+
+      expect(spyFind).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Authentication failed'
-      })
+        message: "Authentication failed."
+      });
+      spyFind.mockClear();
     });
-    test('should return status 401 if email and password does not match', () => {
-      // beforeEach(() => {
-      //   jest.clearAllMocks()
-      // });
-      // const req = mockRequest(
-      //   {
-      //     email: 'smith@mail.ru',
-      //     password: 'jsmit'
-      //   }
-      // );
-      // const res = mockResponse();
+    test('should return status 401 if email and password does not match', async () => {
+      const req = mockRequest(
+        {
+          email: 'smith@mail.ru',
+          password: 'jsmit'
+        }
+      );
+      const res = mockResponse();
 
-      // const fetchedUser = {
-      //   password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
-      // }
+      const spyFind = jest.spyOn(service, "find").mockImplementation((error, results) => {
+        return results(null, [
+          {
+            id: 1,
+            name: "Peter",
+            email: "smith@mail.ru",
+            password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
+          }
+        ]);
+      });
 
-      // jest.spyOn(service, "find").mockImplementation((error, results) => {
-      //   return results(null, [
-      //     {
-      //       id: 1,
-      //       name: "Peter",
-      //       email: "smith@mail.ru",
-      //       password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
-      //     }
-      //   ]);
-      // });
+      await controller.login(req, res);
 
-      // jest.spyOn(bcrypt, "compare").mockReturnValue(req.body.password, fetchedUser.password);
-
-      // controller.login(req, res);
-      // expect(bcrypt.compare).toHaveBeenCalledTimes(1);
-      // expect(res.status).toHaveBeenCalled();
-      // expect(res.json).toHaveBeenCalledWith({
-      //   success: false,
-      //   message: 'Email and password does not match'
-      // })
+      expect(spyFind).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Email and password does not match'
+      })
+      spyFind.mockClear();
     });
     test('should return status 200 if user authenticated', async () => {
-      // beforeEach(() => {
-      //   jest.clearAllMocks()
-      // });
+      const req = mockRequest(
+        {
+          email: 'smith@mail.ru',
+          password: 'jsmith'
+        }
+      );
 
-      // const req = mockRequest(
-      //   {
-      //     email: 'smith@mail.ru',
-      //     password: 'jsmith'
-      //   }
-      // );
+      const spyFind = jest.spyOn(service, "find").mockImplementation((error, results) => {
+        return results(null, [
+          {
+            id: 1,
+            name: "Peter",
+            email: "smith@mail.ru",
+            password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
+          }
+        ]);
+      });
 
-      // const fetchedUser = {
-      //   password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
-      // }
+      const res = mockResponse();
 
-      // jest.spyOn(service, "find").mockImplementation((error, results) => {
-      //   return results(null, [
-      //     {
-      //       id: 1,
-      //       name: "Peter",
-      //       email: "smith@mail.ru",
-      //       password: "$2b$10$Y/cjeKxQrb/QOSlIs41Cf.3HHtNiraeVePYo28po7x9WwuynTzBVm"
-      //     }
-      //   ]);
-      // });
+      await controller.login(req, res);
 
-      // const res = mockResponse();
-
-      // jest.spyOn(bcrypt, "compare").mockReturnValue(req.body.password, fetchedUser.password);
-
-      // await controller.login(req, res);
-      // expect(service.find).toHaveBeenCalledWith(req.body.email, expect.anything());
-      // expect(bcrypt.compare).toHaveBeenCalledTimes(1);
-      // expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, fetchedUser.password, expect.anything());
-      // expect(res.status).toHaveBeenCalledWith(200);
-      // expect(res.json).toHaveBeenCalledWith({
-      //   token: expect.anything(),
-      //   expiresIn: 3600,
-      //   userId: 1,
-      //   userName: "Peter"
-      // });
+      expect(spyFind).toHaveBeenCalledWith(req.body.email, expect.anything());
+      expect(spyFind).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        token: expect.anything(),
+        expiresIn: 3600,
+        userId: 1,
+        userName: "Peter"
+      });
+      spyFind.mockClear();
     });
   });
 });
