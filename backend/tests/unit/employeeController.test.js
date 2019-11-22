@@ -298,17 +298,23 @@ describe("EmployeeController", () => {
         const req = mockRequest({ pagesize: 1, page: 0 });
         const res = mockResponse();
 
-        const getCount = jest.spyOn(service, "getCount").mockImplementation((result) => {
-          return result(null, [{ totalCount: 2 }])
+        const getCount = jest.spyOn(service, "getCount").mockImplementation(() => {
+          return ([{ totalCount: 2 }])
         });
 
-        // ERROR at this point --> const findAll = jest.spyOn(service, "findAll").mockImplementation((numPerPage, page) => {
-        //   return results(1, 0);
-        // });
+        const findAll = jest.spyOn(service, "findAll").mockImplementation((numPerPage, page) => {
+          return results([{
+            empID: 295,
+            empName: "Max",
+            creator: "18664512",
+            empActive: "Yes",
+            dpName: "Finance"
+          }], {maxEmployees: 6});
+        });
 
         await controller.getAllEmployees(req, res);
         expect(getCount).toHaveBeenCalledTimes(1);
-        //expect(findAll).toHaveBeenCalledTimes(1);
+        expect(findAll).toHaveBeenCalledTimes(1);
         // getCount.mockClear();
         // findAll.mockClear();
       });
