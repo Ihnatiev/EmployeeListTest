@@ -1,26 +1,13 @@
 const sql = require('../config/connection');
 const Promise = require('bluebird');
-const connection = require('../config/connection');
 const EmployeeModel = require('../models/employee.model');
 
-var queryAsync = Promise.promisify(connection.query.bind(connection));
+var queryAsync = Promise.promisify(sql.query.bind(sql));
 
 EmployeeModel.getCount = async function () {
   var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
   return result;
 }
-
-// EmployeeModel.getCount = async function (result) {
-//   sql.query("SELECT count(*) as totalCount FROM Employee",
-//     (err, res) => {
-//       if (err) {
-//         result(err, null);
-//       }
-//       else {
-//         result(null, res);
-//       }
-//     });
-// }
 
 EmployeeModel.findAll = async function (numPerPage, page) {
 
@@ -56,7 +43,6 @@ EmployeeModel.create = function (employee, result) {
         result(null, res.insertId);
       }
     });
-  //return employee
 }
 
 EmployeeModel.find = function (employeeId, result) {
