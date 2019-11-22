@@ -11,7 +11,6 @@ UserModel.save = function signup(userId, result) {
         result(null, res.insertId);
       }
     });
-  //return result(null, 2);
 };
 
 UserModel.find = function login(email, result) {
