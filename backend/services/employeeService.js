@@ -1,8 +1,8 @@
 const sql = require('../config/connection');
-const Promise = require('bluebird');
+const Bluebird = require('bluebird');
 const EmployeeModel = require('../models/employee.model');
 
-var queryAsync = Promise.promisify(sql.query.bind(sql));
+var queryAsync = Bluebird.promisify(sql.query.bind(sql));
 
 EmployeeModel.getCount = async function () {
   var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
