@@ -29,7 +29,6 @@ module.exports = {
       let totalEmployee;
       var numPerPage = +req.query.pagesize;
       var page = +req.query.page;
-
       var count = await EmployeeService.getCount();
       var results = await EmployeeService.findAll(numPerPage, page);
       totalEmployee = count[0].totalCount;
