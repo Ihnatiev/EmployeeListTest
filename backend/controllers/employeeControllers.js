@@ -6,17 +6,15 @@ module.exports = {
     try {
       EmployeeService.find(req.params.employeeId,
         (err, employee) => {
-          if (employee == 0 || '') {
+          (employee == 0 || '') ?
             res.status(404).json({
               success: false,
               message: 'Employee not found!'
-            });
-          } else {
+            }) :
             res.status(200).json({
               success: true,
               employee: employee
             });
-          }
         });
     } catch (err) {
       res.status(500).json({
@@ -31,17 +29,16 @@ module.exports = {
       let totalEmployee;
       var numPerPage = +req.query.pagesize;
       var page = +req.query.page;
-      
+
       var count = await EmployeeService.getCount();
       var results = await EmployeeService.findAll(numPerPage, page);
-
-      if (count[0].totalCount === 0) {
+      totalEmployee = count[0].totalCount;
+      if (totalEmployee === 0) {
         res.status(404).json({
           success: false,
           message: 'Employee not found'
         });
       } else if (count && results) {
-        totalEmployee = count[0].totalCount;
         res.status(200).json({
           employees: results,
           maxEmployees: totalEmployee
@@ -64,18 +61,17 @@ module.exports = {
     });
     EmployeeService.create(employee,
       (err, result) => {
-        if (err) {
+        (err) ?
           res.status(500).json({
             success: false,
-            message: 'Adding employee failed!'
-          });
-        } else {
+            message: 'Adding employee failed!',
+            error: err
+          }) :
           res.status(201).json({
             success: true,
             message: 'Employee added successfully!',
             employeeId: result
           });
-        };
       });
   },
 
@@ -91,17 +87,15 @@ module.exports = {
     EmployeeService.update(employeeId, userId, employee,
       (err, result) => {
         try {
-          if (result.affectedRows > 0) {
+          (result.affectedRows > 0) ?
             res.status(200).json({
               success: true,
-              message: 'Update successful!'
-            });
-          } else {
+              message: 'Update successfully!'
+            }) :
             res.status(401).json({
               success: false,
               message: 'You are not authorized!'
             });
-          };
         } catch (error) {
           res.status(500).json({
             success: false,
@@ -117,17 +111,15 @@ module.exports = {
     EmployeeService.delete(employeeId, creator,
       (err, result) => {
         try {
-          if (result.affectedRows > 0) {
+          (result.affectedRows > 0) ?
             res.status(200).json({
               success: true,
               message: 'Deletion successful!'
-            });
-          } else {
+            }) :
             res.status(401).json({
               success: false,
               message: 'You are not authorized!'
             });
-          };
         } catch (error) {
           res.status(500).json({
             success: false,

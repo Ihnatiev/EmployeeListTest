@@ -1,5 +1,8 @@
 <form name="sign" class="formUser" ng-controller="SignupCtrl" ng-model="signForm">
   <div class="container">
+    <label for="name"><b>Name</b></label>
+    <input class="input" type="text" name="name" placeholder="Enter Name" ng-model="name" required>
+    <br />
     <label for="email"><b>Email</b></label>
     <input class="input" type="text" ng-pattern="word" name="email" placeholder="Enter Email" ng-model="email" required>
     <span class="error" ng-show="sign.email.$error.pattern">Invalid email!</span>
@@ -9,6 +12,5 @@
 
     <button class="btn btn-success" type="submit" ng-click="onSignup()">Signup</button>
     <button class="btn btn-danger" type="button" class="cancelbtn">Cancel</button>
-    <span class="psw">Forgot <a href="#">password?</a></span>
   </div>
 </form>

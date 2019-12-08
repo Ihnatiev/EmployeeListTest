@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Swagger EmployeeList
+tags:
+  - name: user
+    description: Everything about employee
+paths:
+  /auth/signup:
+    post:
+      summary: signUp user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              default:
+                name: Uncle Bob
+                email: bob@test.com
+                password: test1234
+        description: Create new user
+        required: true
+      tags:
+        - user
+      responses: "201":
+          description: Created
+        "400":
+          description: Bad request
+        default:
+          description: Unexpected error
+servers:
+  - url: https: //localhost:3002/api
+components:
+  securitySchemes:
+    oauth2:
+      name: Authorization
+      in: header
+      type: apiKey
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: User

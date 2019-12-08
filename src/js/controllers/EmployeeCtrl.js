@@ -3,7 +3,7 @@
 var app = angular.module('app')
   .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
 
-    const path = 'http://localhost:3000/api/';
+    const path = 'https://localhost:3002/api/';
 
     $scope.dpName = {
       model: null,
@@ -19,11 +19,11 @@ var app = angular.module('app')
     };
 
     $scope.currentPage = 0;
-    $scope.totalEmp = 0;
+    $scope.totalEmployees = 0;
 
     $scope.onNext = function () {
       $scope.currentPage = $scope.pageIndex + 1;
-      // $scope.postsPerPage = $scope.pageSize;
+      $scope.postsPerPage = $scope.pagesize;
       $scope.getAllEmployees();
     };
 
@@ -33,15 +33,11 @@ var app = angular.module('app')
     };
 
     $scope.getAllEmployees = function () {
-      $http.get(path + `employees?pagesize=${$scope.postsPerPage}&page=${$scope.currentPage}`)
+      $http.get(path + `employees?pagesize=2&page=${$scope.currentPage}`)
         .then(res => {
           if (res.status == 200) {
             $scope.employees = res.data.employees;
-            $scope.totalEmp = res.data.pagination.totalItems;
-            $scope.pageIndex = res.data.pagination.current;
-            $scope.pageSize = res.data.pagination.perPage;
-            $scope.previousP = res.data.pagination.previous;
-            $scope.nextP = res.data.pagination.next;
+            $scope.totalEmployees = res.data.maxEmployees;
           }
         }).catch(err => {
           alert(err);

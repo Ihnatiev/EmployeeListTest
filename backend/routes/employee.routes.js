@@ -3,8 +3,10 @@ const EmployeeController = require('../controllers/employeeControllers');
 const checkAuth = require('../middleware/check-auth');
 
 router.route('/')
-  .get(EmployeeController.getAllEmployees)
   .post(checkAuth, EmployeeController.createEmployee);
+
+router.route('/')
+  .get(EmployeeController.getAllEmployees);
 
 router.route('/:employeeId')
   .get(EmployeeController.getEmployeeById)

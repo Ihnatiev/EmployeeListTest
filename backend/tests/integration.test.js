@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../app');
 
 let token;
-let employeeId;
+let employeeId; 
 
 // describe('User signUp', () => {
 //   test('Create new user', (done) => {
@@ -41,7 +41,7 @@ describe('Employee endpoints', () => {
       });
   });
 
-  test('Get employees', () => {
+  test.skip('Get employees', () => {
     return request(app)
       .get('/api/employees?pagesize=5&&page=0')
       .then((response) => {
@@ -49,50 +49,50 @@ describe('Employee endpoints', () => {
       });
   });
 
-  // test('Create new employee', (done) => {
-  //   return request(app)
-  //     .post('/api/employees')
-  //     .send({
-  //       empName: 'Uncle Bob',
-  //       empActive: 0,
-  //       empDepartment: 2
-  //     })
-  //     .set('Authorization', `Bearer ${token}`)
-  //     .end((err, response) => {
-  //       expect(response.status).toBe(201);
-  //       employeeId = response.body.employeeId;
-  //       done();
-  //     });
-  // });
+  test('Create new employee', (done) => {
+    return request(app)
+      .post('/api/employees')
+      .send({
+        empName: 'Uncle Bob',
+        empActive: 0,
+        empDepartment: 2
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, response) => {
+        expect(response.status).toBe(201);
+        employeeId = response.body.employeeId;
+        done();
+      });
+  });
 
-  // test('Update an employee', () => {
-  //   return request(app)
-  //     .put('/api/employees/' + employeeId)
-  //     .send({
-  //       empName: 'Marmok',
-  //       empActive: 1,
-  //       empDepartment: 3
-  //     })
-  //     .set('Authorization', `Bearer ${token}`)
-  //     .then((response) => {
-  //       expect(response.status).toBe(200);
-  //     });
-  // });
+  test('Update an employee', () => {
+    return request(app)
+      .put('/api/employees/' + employeeId)
+      .send({
+        empName: 'Marmok',
+        empActive: 1,
+        empDepartment: 3
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .then((response) => {
+        expect(response.status).toBe(200);
+      });
+  });
 
-  // test('Get an employee', () => {
-  //   return request(app)
-  //     .get('/api/employees/' + employeeId)
-  //     .then((response) => {
-  //       expect(response.status).toBe(200);
-  //     });
-  // });
+  test('Get an employee', () => {
+    return request(app)
+      .get('/api/employees/' + employeeId)
+      .then((response) => {
+        expect(response.status).toBe(200);
+      });
+  });
 
-  // test('Delete an employee', () => {
-  //   return request(app)
-  //     .delete('/api/employees/' + employeeId)
-  //     .set('Authorization', `Bearer ${token}`)
-  //     .then((response) => {
-  //       expect(response.status).toBe(200);
-  //     });
-  // });
+  test('Delete an employee', () => {
+    return request(app)
+      .delete('/api/employees/' + employeeId)
+      .set('Authorization', `Bearer ${token}`)
+      .then((response) => {
+        expect(response.status).toBe(200);
+      });
+  });
 });

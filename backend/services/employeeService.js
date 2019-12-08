@@ -5,7 +5,7 @@ const EmployeeModel = require('../models/employee.model');
 var queryAsync = Bluebird.promisify(sql.query.bind(sql));
 
 EmployeeModel.getCount = async function () {
-  var result = queryAsync("SELECT count(*) as totalCount FROM Employee");
+  var result = queryAsync(`SELECT count(*) as totalCount FROM EmployeeDB.Employees`);
   return result;
 }
 
@@ -15,10 +15,10 @@ EmployeeModel.findAll = async function (numPerPage, page) {
   var end_limit = numPerPage;
   var limit = skip + ',' + end_limit;
 
-  var queryResults = queryAsync("SELECT empID, empName, creator,\
-    IF(empActive, 'Yes', 'No')\
-    empActive, dpName FROM Employee\
-    INNER JOIN Department ON empDepartment = dpID LIMIT " + limit)
+  var queryResults = queryAsync(`SELECT empID, empName, creator,
+    IF(empActive, 'Yes', 'No')
+    empActive, dpName FROM EmployeeDB.Employees
+    INNER JOIN EmployeeDB.Departments ON empDepartment = dpID LIMIT ` + limit)
   let results = [];
   results = queryResults.map(m => {
     return m;
@@ -27,8 +27,8 @@ EmployeeModel.findAll = async function (numPerPage, page) {
 }
 
 EmployeeModel.create = function (employee, result) {
-  sql.query("INSERT INTO Employee SET empName = ?,\
-  empActive = ?, empDepartment = ?, creator = ?",
+  sql.query(`INSERT INTO EmployeeDB.Employees SET empName = ?,
+  empActive = ?, empDepartment = ?, creator = ?`,
     [
       employee.empName,
       employee.empActive,
@@ -47,11 +47,11 @@ EmployeeModel.create = function (employee, result) {
 
 EmployeeModel.find = function (employeeId, result) {
   sql.query(
-    "SELECT empID, empName,\
-    IF(empActive, 'Yes', 'No')\
-    empActive, dpName FROM Employee\
-    INNER JOIN Department\
-    ON empDepartment = dpID WHERE empID = ? ", employeeId,
+    `SELECT empID, empName,
+    IF(empActive, 'Yes', 'No')
+    empActive, dpName FROM EmployeeDB.Employees
+    INNER JOIN EmployeeDB.Departments
+    ON empDepartment = dpID WHERE empID = ?`, employeeId,
     (err, res) => {
       if (err) {
         result(err, null);
@@ -64,7 +64,7 @@ EmployeeModel.find = function (employeeId, result) {
 
 EmployeeModel.update = function (employeeId, userId, employee, result) {
   sql.query(
-    "UPDATE Employee SET ? where empID = ? AND creator = ?",
+    `UPDATE EmployeeDB.Employees SET ? where empID = ? AND creator = ?`,
     [employee, employeeId, userId], (err, res) => {
       if (err) {
         result(err, null);
@@ -76,7 +76,7 @@ EmployeeModel.update = function (employeeId, userId, employee, result) {
 
 EmployeeModel.delete = function (employeeId, creator, result) {
   sql.query(
-    "DELETE FROM Employee WHERE empID = ? AND creator = ?",
+    `DELETE FROM EmployeeDB.Employees WHERE empID = ? AND creator = ?`,
     [employeeId, creator], (err, res) => {
       if (err) {
         result(null, err);

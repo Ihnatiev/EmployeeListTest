@@ -1,0 +1,88 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger EmployeeList"
+  },
+  "host": "localhost:3002",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/signup": {
+      "x-swagger-router-controller": "userControllers",
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RequestBodyModel"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created",
+            "schema": {
+              "$ref": "#/definitions/ResponseBodyModel"
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "RequestBodyModel": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Max"
+        },
+        "email": {
+          "type": "string",
+          "example": "max@mail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "123max",
+          "minimum": 5,
+          "maximum": 15
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "password"
+      ]
+    },
+    "ResponseBodyModel": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "success",
+        "message",
+        "userId"
+      ]
+    }
+  }
+}
