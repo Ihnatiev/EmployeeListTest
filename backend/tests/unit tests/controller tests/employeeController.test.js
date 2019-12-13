@@ -97,7 +97,7 @@ describe("EmployeeController", () => {
         });
         const req = mockRequest({ employeeId: 262 }, { userId: 6543 }, {
           empName: "Markus",
-          empActive: 1,
+          empActive: true,
           empDepartment: 2
         });
         const res = mockResponse();
@@ -111,7 +111,7 @@ describe("EmployeeController", () => {
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
           success: true,
-          message: 'Update successful!'
+          message: 'Update successfully!'
         });
         spyUpdate.mockClear();
       });
@@ -121,7 +121,7 @@ describe("EmployeeController", () => {
         });
         const req = mockRequest({ employeeId: 262 }, { userId: 96386 }, {
           empName: "Markus",
-          empActive: 1,
+          empActive: true,
           empDepartment: 2
         });
         const res = mockResponse();
@@ -146,7 +146,7 @@ describe("EmployeeController", () => {
         });
         const req = mockRequest({ employeeId: 262 }, { userId: 6543 }, {
           empName: "Markus",
-          empActive: 1,
+          empActive: true,
           empDepartment: ""
         });
         const res = mockResponse();
@@ -243,27 +243,20 @@ describe("EmployeeController", () => {
         const req = mockRequest(
           {
             empName: "Nik",
-            empActive: 1,
+            empActive: true,
             empDepartment: 3
           },
           { userId: 3412 }
         );
         const res = mockResponse();
-        const expectedEmployee = {
-          empName: "Nik",
-          empActive: 1,
-          empDepartment: 3,
-          creator: 3412
-        };
 
-        const spyCreate = jest.spyOn(service, "create").mockImplementation((err, result) => {
+        const spyCreate = jest.spyOn(service, "create").mockImplementation((emp, creator, result) => {
           return result(null, 322);
         });
 
         controller.createEmployee(req, res);
 
         expect(spyCreate).toHaveBeenCalledTimes(1);
-        expect(spyCreate).toBeCalledWith(expectedEmployee, expect.anything());
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.json).toHaveBeenCalledWith({
           success: true,
@@ -287,12 +280,12 @@ describe("EmployeeController", () => {
         const res = mockResponse();
         const expectedEmployee = {
           empName: "Nik",
-          empActive: 1,
+          empActive: true,
           empDepartment: 2,
           creator: 4521
         };
 
-        const spyCreate = jest.spyOn(service, "create").mockImplementation((err, result) => {
+        const spyCreate = jest.spyOn(service, "create").mockImplementation((err, creator, result) => {
           return result(err, null);
         });
 
@@ -310,7 +303,7 @@ describe("EmployeeController", () => {
     });
 
     describe("Get request / response test", () => {
-      test.skip("should get all employees", async () => {
+      test("should get all employees", async () => {
         const mockRequest = (query) => ({ query });
         const req = mockRequest({ pagesize: 1, page: 0 });
         const res = mockResponse();
@@ -349,7 +342,7 @@ describe("EmployeeController", () => {
         getCount.mockClear();
         findAll.mockClear();
       });
-      test.skip("should return status 404", async () => {
+      test("should return status 404", async () => {
         const mockRequest = (query) => ({ query });
         const req = mockRequest({ pagesize: 3, page: 0 });
         const res = mockResponse();
@@ -374,7 +367,7 @@ describe("EmployeeController", () => {
         getCount.mockClear();
         findAll.mockClear();
       });
-      test.skip("should return status 500", async () => {
+      test("should return status 500", async () => {
         const mockRequest = (query) => ({ query });
         const req = mockRequest();
         const res = mockResponse();
