@@ -1,16 +1,13 @@
 const router = require('express').Router();
-const EmployeeController = require('../controllers/employeeControllers');
+const Controller = require('../controllers/employeeControllers');
+const swagger = require('../swagger/employees/validator');
 const checkAuth = require('../middleware/check-auth');
 
-router.route('/')
-  .post(checkAuth, EmployeeController.createEmployee);
+router.get('/', swagger.validateQuery('emp-all'), Controller.getAllEmployees);
+router.get('/:employeeId', swagger.validateId('emp-id'), Controller.getEmployeeById);
 
-router.route('/')
-  .get(EmployeeController.getAllEmployees);
-
-router.route('/:employeeId')
-  .get(EmployeeController.getEmployeeById)
-  .put(checkAuth, EmployeeController.updateEmployeeById)
-  .delete(checkAuth, EmployeeController.deleteEmployeeById);
+router.post('/', swagger.validateBody('emp-create'), checkAuth, Controller.createEmployee);
+router.put('/:employeeId', swagger.validateBody('emp-create'), checkAuth, Controller.updateEmployeeById);
+router.delete('/:employeeId', swagger.validateId('emp-id'), checkAuth, Controller.deleteEmployeeById);
 
 module.exports = router;
