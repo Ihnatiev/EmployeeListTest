@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const secret = require('../config/secret');
 const userService = require('../services/userService');
 const { ErrorHandler } = require('../middleware/errorHandler');
