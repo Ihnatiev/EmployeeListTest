@@ -1,5 +1,4 @@
 const EmployeeService = require('../services/employeeService');
-const EmployeeModel = require('../models/employee.model');
 
 module.exports = {
   getEmployeeById: (req, res) => {
@@ -26,12 +25,11 @@ module.exports = {
 
   getAllEmployees: async (req, res) => {
     try {
-      let totalEmployee;
       var numPerPage = +req.query.pagesize;
       var page = +req.query.page;
       var count = await EmployeeService.getCount();
       var results = await EmployeeService.findAll(numPerPage, page);
-      totalEmployee = count[0].totalCount;
+      var totalEmployee = count[0].totalCount;
       if (totalEmployee === 0) {
         res.status(404).json({
           success: false,
@@ -52,19 +50,14 @@ module.exports = {
   },
 
   createEmployee: (req, res) => {
-    var employee = new EmployeeModel({
-      empName: req.body.empName,
-      empActive: req.body.empActive,
-      empDepartment: req.body.empDepartment,
-      creator: req.userData.userId
-    });
-    EmployeeService.create(employee,
+    var emp = { empName, empActive, empDepartment } = req.body;
+    var creator = req.userData.userId;
+    EmployeeService.create(emp, creator,
       (err, result) => {
         (err) ?
           res.status(500).json({
             success: false,
-            message: 'Adding employee failed!',
-            error: err
+            message: 'Adding employee failed!'
           }) :
           res.status(201).json({
             success: true,
@@ -76,14 +69,9 @@ module.exports = {
 
   updateEmployeeById: (req, res) => {
     var employeeId = req.params.employeeId;
-    var userId = req.userData.userId;
-    var employee = new EmployeeModel({
-      empName: req.body.empName,
-      empActive: req.body.empActive,
-      empDepartment: req.body.empDepartment,
-      creator: userId
-    });
-    EmployeeService.update(employeeId, userId, employee,
+    var creator = req.userData.userId;
+    var emp = { empName, empActive, empDepartment } = req.body;
+    EmployeeService.update(employeeId, creator, emp,
       (err, result) => {
         try {
           (result.affectedRows > 0) ?
