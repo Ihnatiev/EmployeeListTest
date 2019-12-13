@@ -4,46 +4,45 @@ const app = require('../app');
 describe('Integration tests', () => {
   describe('Employees', () => {
     test('a valid string query for get all employees - return 200', async () => {
-      return await request(app).get('/api/employees?pagesize=1&page=0')
-        .then((response) => {
-          expect(response.status).toEqual(200);
-          expect(response.body).toStrictEqual({
-            'employees': [
-              {
-                'empID': 1,
-                'empName': 'Lisa',
-                'creator': 'f6f7dd58-0b07-494e-85d6-c0c03b902256',
-                'empActive': 'Yes',
-                'dpName': 'HR'
-              }],
-            'maxEmployees': 4
-          });
+      await request(app).get('/api/employees?pagesize=1&page=0')
+        .expect(200)
+        .expect({
+          'employees': [
+            {
+              'empID': 1,
+              'empName': 'Lisa',
+              'creator': 'f6f7dd58-0b07-494e-85d6-c0c03b902256',
+              'empActive': 'Yes',
+              'dpName': 'HR'
+            }],
+          'maxEmployees': 4
         });
     });
     test('an invalid string query for get all employees - return 400', async () => {
-      return await request(app).get('/api/employees?pagesize=1')
-        .then((response) => {
-          expect(response.status).toEqual(400);
-        });
+      await request(app)
+        .get('/api/employees?pagesize=1')
+        .expect(400);
     });
     test('a valid string query for get an employee - return 200', async () => {
-      const response = await request(app).get('/api/employees/1');
-      expect(response.status).toEqual(200);
-      expect(response.body).toStrictEqual({
-        'success': true,
-        'employee': [
-          {
-            'empID': 1,
-            'empName': 'Lisa',
-            'empActive': 'Yes',
-            'dpName': 'HR'
-          }
-        ]
-      });
+      await request(app)
+        .get('/api/employees/1')
+        .expect(200)
+        .expect({
+          'success': true,
+          'employee': [
+            {
+              'empID': 1,
+              'empName': 'Lisa',
+              'empActive': 'Yes',
+              'dpName': 'HR'
+            }
+          ]
+        });
     });
     test('an invalid string query for get an employee - return 400', async () => {
-      const response = await request(app).get('/api/employees/');
-      expect(response.status).toEqual(400);
+      await request(app)
+        .get('/api/employees/')
+        .expect(400);
     });
     describe('Requests without authentication to routes of employees', () => {
       const data = {
