@@ -1,74 +1,53 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const secret = require('../config/secret');
-const UserService = require('../services/userService');
-const UserModel = require('../models/user.model');
-const uuid = require('uuid');
+const userService = require('../services/userService');
+const { ErrorHandler } = require('../middleware/errorHandler');
 
 module.exports = {
   signup: (req, res) => {
-    if (!req.body.name || !req.body.email || !req.body.password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please pass name, email and password.'
-      });
-    } else {
-      const cryptPass = bcrypt.hashSync(req.body.password, 10);
-      const userId = uuid();
-      const userObj = new UserModel({
-        id: userId,
-        name: req.body.name,
-        email: req.body.email,
-        password: cryptPass
-      });
-      try {
-        UserService.save(userObj,
-          (err, userId) => {
-            (err) ?
-              res.status(500).json({
-                success: false,
-                message: 'This email already exists.',
-                err: err
-              }) :
-              res.status(201).json({
-                success: true,
-                message: 'User created!',
-                userId: userId
-              });
-          });
-      } catch (error) {
-        res.status(500).json({
-          message: 'Invalid authentication credentials!'
+    try {
+      const userObj = { name, email, password } = req.body;
+      userService.save(userObj,
+        (newUser, error) => {
+          (newUser) ?
+            res.status(201).json({
+              success: true,
+              message: 'User created!',
+              userId: newUser
+            }) :
+            res.status(500).json({
+              success: false,
+              message: 'This email already exists.'
+            });
         });
-      };
-    };
+    } catch (error) {
+      throw new ErrorHandler(500, 'An error occurred trying to process your request');
+    }
   },
 
   login: async (req, res) => {
-    let fetchedUser;
-    var email = req.body.email;
-    var password = req.body.password;
-    await UserService.find(email,
+    await userService.findOne(req.body.email,
       async (error, user) => {
-        fetchedUser = user[0];
         if (user.length > 0) {
-          const result = await bcrypt.compare(password, fetchedUser.password);
+          const fetchedUser = user[0];
           const token = jwt.sign({ userId: fetchedUser.id, email: fetchedUser.email },
             secret.jwtSecret, { algorithm: 'HS256', expiresIn: '1h' });
+          const result = await bcrypt.compare(req.body.password, fetchedUser.password);
           (!result) ?
             res.status(401).json({
               success: false,
               message: 'Email and password does not match'
             }) :
             res.status(200).json({
-              token: token,
+              token: 'Bearer ' + token,
               expiresIn: 3600,
               userId: fetchedUser.id,
               userName: fetchedUser.name
             });
         } else {
           res.status(500).json({
-            success: false,
+            status: 'error',
             message: "Authentication failed."
           });
         };
