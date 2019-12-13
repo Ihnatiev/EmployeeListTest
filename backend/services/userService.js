@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const sql = require('../config/connection');
 const UserModel = require('../models/user.model');
 
