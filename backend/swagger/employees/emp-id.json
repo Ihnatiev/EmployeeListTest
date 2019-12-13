@@ -1,0 +1,12 @@
+{
+  "title": "emp-id",
+  "description": "describes properties required to get an employee",
+  "properties": {
+    "employeeId": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "employeeId"
+  ]
+}
