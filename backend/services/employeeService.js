@@ -18,7 +18,7 @@ EmployeeModel.findAll = async function (numPerPage, page) {
   var queryResults = queryAsync(`SELECT empID, empName, creator,
     IF(empActive, 'Yes', 'No')
     empActive, dpName FROM EmployeeDB.Employees
-    INNER JOIN EmployeeDB.Departments ON empDepartment = dpID LIMIT ` + limit)
+    INNER JOIN EmployeeDB.Departments ON empDepartment = dpID ORDER BY empID LIMIT ` + limit)
   let results = [];
   results = queryResults.map(m => {
     return m;
@@ -26,15 +26,15 @@ EmployeeModel.findAll = async function (numPerPage, page) {
   return results;
 }
 
-EmployeeModel.create = function (employee, result) {
-  sql.query(`INSERT INTO EmployeeDB.Employees SET empName = ?,
-  empActive = ?, empDepartment = ?, creator = ?`,
-    [
-      employee.empName,
-      employee.empActive,
-      employee.empDepartment,
-      employee.creator
-    ],
+EmployeeModel.create = function (emp, creator, result) {
+  const employee = new EmployeeModel({
+    empName: emp.empName,
+    empActive: emp.empActive,
+    empDepartment: emp.empDepartment,
+    creator: creator
+  });
+  sql.query(`INSERT INTO EmployeeDB.Employees SET ?`,
+    [employee],
     (err, res) => {
       if (err) {
         result(err, null);
@@ -62,10 +62,16 @@ EmployeeModel.find = function (employeeId, result) {
     });
 }
 
-EmployeeModel.update = function (employeeId, userId, employee, result) {
+EmployeeModel.update = function (employeeId, creator, emp, result) {
+  var employee = new EmployeeModel({
+    empName: emp.empName,
+    empActive: emp.empActive,
+    empDepartment: emp.empDepartment,
+    creator: creator
+  });
   sql.query(
     `UPDATE EmployeeDB.Employees SET ? where empID = ? AND creator = ?`,
-    [employee, employeeId, userId], (err, res) => {
+    [employee, employeeId, creator], (err, res) => {
       if (err) {
         result(err, null);
       } else {
