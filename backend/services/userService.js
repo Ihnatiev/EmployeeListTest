@@ -1,19 +1,27 @@
+const uuid = require('uuid');
+const bcrypt = require('bcrypt');
 const sql = require('../config/connection');
 const UserModel = require('../models/user.model');
 
-UserModel.save = function signup(userId, result) {
-  sql.query("INSERT INTO EmployeeDB.Users SET ?", userId,
+UserModel.save = function (userObj, result) {
+  const user = new UserModel({
+    id: uuid(),
+    name: userObj.name,
+    email: userObj.email,
+    password: bcrypt.hashSync(userObj.password, 10)
+  });
+  sql.query("INSERT INTO EmployeeDB.Users SET ?", [user],
     (err, res) => {
       if (err) {
-        result(err, null);
+        result(null, err);
       }
       else {
-        result(null, userId.id);
+        result(user.id, null);
       }
     });
-};
+}
 
-UserModel.find = function login(email, result) {
+UserModel.findOne = function (email, result) {
   sql.query("SELECT * FROM EmployeeDB.Users WHERE email = ?", [email],
     (err, res) => {
       if (err) {
