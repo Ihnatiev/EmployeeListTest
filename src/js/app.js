@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'ngStorage', 'ngCookies'])
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngStorage', 'ngCookies'])
   .config(config);
 // .run(run);
 function config($stateProvider, $urlRouterProvider) {
@@ -13,7 +13,8 @@ function config($stateProvider, $urlRouterProvider) {
     .state('createUser', {
       url: '/user/signup',
       templateUrl: 'auth/signup/signupUser.html',
-      controller: 'SignupCtrl'
+      controller: 'SignupCtrl',
+      authenticate: true
     })
     .state('allEmployees', {
       url: '/employees',
@@ -21,14 +22,16 @@ function config($stateProvider, $urlRouterProvider) {
       controller: 'EmployeeCtrl'
     })
     .state('view.id', {
-      url: '/employees/',
+      url: '/employees/:employeeId',
       templateUrl: 'views/empViewDialog.html',
-      controller: 'EmployeeCtrl'
+      controller: 'EmployeeCtrl',
+      authenticate: true
     })
     .state('editEmployee', {
-      url: '/employees/{employeeId}',
+      url: '/employees/:employeeId',
       templateUrl: 'views/empEditDialog.html',
-      controller: 'EmployeeCtrl'
+      controller: 'EmployeeCtrl',
+      authenticate: true
     });
     $urlRouterProvider.otherwise("/employees");
 };

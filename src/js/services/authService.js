@@ -1,5 +1,6 @@
 angular.module('app')
   .factory('authService', function ($http, $window, $location) {
+    isAuthenticated = false;
     return {
       loginUser: function (user) {
         $http.post("https://localhost:6969/api/auth/login", user)
@@ -28,11 +29,11 @@ angular.module('app')
       },
 
       getIsAuth: function () {
-        return this.isAuthenticated;
+        return isAuthenticated;
       },
 
       getUserId: function () {
-        return userId;
+        return $window.localStorage.getItem('userId', userId);;
       },
 
       getUserName: function () {

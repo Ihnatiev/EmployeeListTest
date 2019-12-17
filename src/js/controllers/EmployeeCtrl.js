@@ -4,7 +4,7 @@ var app = angular.module('app')
   .controller('EmployeeCtrl', ['authService', '$scope', '$http', '$window', function (authService, $scope, $http, $window) {
 
     const path = 'https://localhost:6969/api/';
-
+    
     $scope.dpName = {
       model: null,
       availableDepartments: [
@@ -18,31 +18,31 @@ var app = angular.module('app')
       value: false
     };
 
-    $scope.postsPerPage = 5;
-    $scope.currentPage = 0;
-    $scope.totalEmployees = 0;
-
-    // $scope.onNext = function () {
-    //   $scope.currentPage = $scope.pageIndex + 1;
-    //   $scope.postsPerPage = $scope.pagesize;
-    //   $scope.getAllEmployees();
-    // };
-
-    // $scope.onPrevious = function () {
-    //   $scope.currentPage = $scope.pageIndex - 1;
-    //   $scope.getAllEmployees();
-    // };
+    $scope.maxSize = 5;
+    $scope.totalCount = 0;
+    $scope.pageIndex = 0;
+    $scope.pageSizeSelected = 5;
 
     $scope.getAllEmployees = function () {
-      $http.get(path + `employees?pagesize=${$scope.postsPerPage}&page=${$scope.currentPage}`)
+      $http.get(path + 'employees?page=' + $scope.pageIndex + '&pagesize=' + $scope.pageSizeSelected)
         .then(res => {
           if (res.status == 200) {
             $scope.employees = res.data.employees;
-            $scope.totalEmployees = res.data.maxEmployees;
+            $scope.totalCount = res.data.maxEmployees;
           }
         }).catch(err => {
           alert(err);
         });
+    };
+
+    $scope.getAllEmployees();
+    $scope.pageChanged = function () {
+      $scope.getAllEmployees();
+    };
+
+    $scope.changePageSize = function () {
+      $scope.pageIndex = 0;
+      $scope.getAllEmployees();
     };
 
     $scope.getEmployeeById = function (employeeId) {
@@ -155,8 +155,8 @@ var app = angular.module('app')
     };
 
     $scope.onLogout = () => {
-        authService.logout();
-      };
+      authService.logout();
+    };
 
   }])
   .directive('popUpDialog', function () {
