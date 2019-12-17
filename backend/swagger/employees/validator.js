@@ -16,7 +16,7 @@ function errorResponse(schemaErrors) {
     };
   })
   return {
-    status: 'failed',
+    message: 'Bad request',
     errors: errors
   }
 };

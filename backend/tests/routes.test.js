@@ -101,7 +101,7 @@ describe('Integration tests', () => {
         await request(app)
           .post('/api/employees/')
           .send(data)
-          .set('Authorization', `${token}`)
+          .set('Authorization', `Bearer ${token}`)
           .expect('Content-Type', /json/)
           .then((response) => {
             expect(response.status).toEqual(201);
@@ -123,7 +123,7 @@ describe('Integration tests', () => {
             empActive: false,
             empDepartment: 1 // HR
           })
-          .set('Authorization', `${token}`)
+          .set('Authorization', `Bearer ${token}`)
           .then((response) => {
             expect(response.status).toBe(200);
           });
@@ -131,7 +131,7 @@ describe('Integration tests', () => {
       test('Delete an employee', async () => {
         await request(app)
           .delete('/api/employees/' + employeeId)
-          .set('Authorization', `${token}`)
+          .set('Authorization', `Bearer ${token}`)
           .then((response) => {
             expect(response.status).toBe(200);
           });

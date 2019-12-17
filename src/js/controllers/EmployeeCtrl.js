@@ -1,16 +1,16 @@
 'use strict';
 
 var app = angular.module('app')
-  .controller('EmployeeCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('EmployeeCtrl', ['authService', '$scope', '$http', '$window', function (authService, $scope, $http, $window) {
 
-    const path = 'https://localhost:3002/api/';
+    const path = 'https://localhost:6969/api/';
 
     $scope.dpName = {
       model: null,
       availableDepartments: [
-        { id: '1', name: 'HR' },
-        { id: '2', name: 'Tech' },
-        { id: '3', name: 'Finance' }
+        { id: 1, name: 'HR' },
+        { id: 2, name: 'Tech' },
+        { id: 3, name: 'Finance' }
       ]
     };
 
@@ -18,22 +18,23 @@ var app = angular.module('app')
       value: false
     };
 
+    $scope.postsPerPage = 5;
     $scope.currentPage = 0;
     $scope.totalEmployees = 0;
 
-    $scope.onNext = function () {
-      $scope.currentPage = $scope.pageIndex + 1;
-      $scope.postsPerPage = $scope.pagesize;
-      $scope.getAllEmployees();
-    };
+    // $scope.onNext = function () {
+    //   $scope.currentPage = $scope.pageIndex + 1;
+    //   $scope.postsPerPage = $scope.pagesize;
+    //   $scope.getAllEmployees();
+    // };
 
-    $scope.onPrevious = function () {
-      $scope.currentPage = $scope.pageIndex - 1;
-      $scope.getAllEmployees();
-    };
+    // $scope.onPrevious = function () {
+    //   $scope.currentPage = $scope.pageIndex - 1;
+    //   $scope.getAllEmployees();
+    // };
 
     $scope.getAllEmployees = function () {
-      $http.get(path + `employees?pagesize=2&page=${$scope.currentPage}`)
+      $http.get(path + `employees?pagesize=${$scope.postsPerPage}&page=${$scope.currentPage}`)
         .then(res => {
           if (res.status == 200) {
             $scope.employees = res.data.employees;
@@ -55,13 +56,21 @@ var app = angular.module('app')
     };
 
     $scope.createEmployee = function () {
-      $http.post(path + 'employees', {
+      var formData = {
         'empName': $scope.empName,
         'empActive': $scope.empActive.value,
         'empDepartment': $scope.dpName.model
-      }).then(newEmp => {
-        $scope.employees.push(newEmp);
-        alert(newEmp.data.message);
+      };
+      $http({
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": $window.localStorage.getItem('token')
+        },
+        url: path + 'employees/',
+        data: formData
+      }).then(response => {
+        alert(response.data.message);
         document.forms["addEmployee"].reset();
         $scope.closeEmpAddDialog();
         $scope.getAllEmployees();
@@ -70,51 +79,46 @@ var app = angular.module('app')
         $scope.closeEmpAddDialog();
       });
     };
-    //////////////////////////////////////////////////////////////////////////////
 
-    $scope.editBtn = function (employeeId) {
-      $scope.showEmpEditDialog = true;
-      $http.get(path + 'employees/' + employeeId)
-        .then(
-          res => {
-            $scope.employeeEditDetails = res.data.employee;
-          })
-        .catch(
-          err => {
-            alert(err.data.message);
-          });
-    };
-
-    $scope.editEmployee = function (employeeId) {
-      $http.put(path + 'employees/' + employeeId, {
-        'empName': $scope.empEditName,
+    $scope.onEdit = function (employeeId) {
+      var formData = {
+        'empName': $scope.empName,
         'empActive': $scope.empActive.value,
-        'empDepartment': $scope.dpName.model,
-        // 'empID': $scope.empID
-      }).then(
-        editEmp => {
-          $scope.employees.push(editEmp);
-          // $scope.closeEmpEditDialog();
-          // $scope.getAllEmployees();
-          document.forms["editEmployee"].reset();
-        }).catch(
-          err => {
-            alert(err.data.message);
-            $scope.closeEmpEditDialog();
-          });
+        'empDepartment': $scope.dpName.model
+      };
+      $http({
+        method: 'put',
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": $window.localStorage.getItem('token')
+        },
+        url: path + 'employees/' + employeeId,
+        data: formData
+      }).then(function (response) {
+        alert(response.data.message);
+        document.forms["editEmployee"].reset();
+        $scope.closeEmpEditDialog();
+        $scope.getAllEmployees();
+      }).catch(err => {
+        console.log(err.data.message);
+        $scope.closeEmpEditDialog();
+      });
     };
-    ///////////////////////////////////////////////////////////////////////////////
+
     $scope.deleteEmployee = function (employeeId) {
       if (confirm("Are you sure you want to delete this employee?")) {
-        $http.delete(path + 'employees/' + employeeId)
-          .then(
-            result => {
-              alert(result.data.message);
-              $scope.getAllEmployees();
-            }).catch(
-              err => {
-                alert(err.data.message);
-              });
+        $http({
+          method: 'delete',
+          headers: {
+            "authorization": $window.localStorage.getItem('token')
+          },
+          url: path + 'employees/' + employeeId
+        }).then(result => {
+          alert(result.data.message);
+          $scope.getAllEmployees();
+        }).catch(err => {
+          alert(err.data.message);
+        });
       }
       else {
         return false;
@@ -131,12 +135,28 @@ var app = angular.module('app')
     };
 
     $scope.addBtn = function () {
+      //if (authService.getIsAuth() === true) {
       $scope.showEmpAddDialog = true;
+      //}
+    };
+
+    $scope.editBtn = function (employeeId) {
+      $scope.showEmpEditDialog = true;
+      $http.get(path + 'employees/' + employeeId)
+        .then(res => {
+          $scope.employeeEditDetails = res.data.employee;
+        }).catch(err => {
+          alert(err.data.message);
+        });
     };
 
     $scope.searchEmployee = function () {
       $scope.search = $scope.searchName;
     };
+
+    $scope.onLogout = () => {
+        authService.logout();
+      };
 
   }])
   .directive('popUpDialog', function () {

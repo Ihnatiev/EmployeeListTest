@@ -40,7 +40,7 @@ module.exports = {
               message: 'Email and password does not match'
             }) :
             res.status(200).json({
-              token: 'Bearer ' + token,
+              token: token,
               expiresIn: 3600,
               userId: fetchedUser.id,
               userName: fetchedUser.name

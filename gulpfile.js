@@ -35,13 +35,8 @@ gulp.task('html', function () {
         }));
 });
 
-gulp.task('img', function () {
-    return gulp.src('src/img/**')
-        .pipe(gulp.dest('dist/img'));
-});
-
 gulp.task('build', function () {
-    gulp.start(['css', 'js', 'html', 'img'])
+    gulp.start(['css', 'js', 'html'])
 });
 
 gulp.task('browser-sync', function () {

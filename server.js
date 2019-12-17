@@ -35,7 +35,7 @@ const onError = error => {
   }
 };
 
-const port = normalizePort(process.env.PORT || "4223");
+const port = normalizePort(process.env.PORT || "6969");
 app.set("port", port);
 
 const httpsOptions = {

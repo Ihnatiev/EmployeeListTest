@@ -5,7 +5,6 @@ const userRoutes = require('./routes/user.routes');
 const swaggerUi = require('swagger-ui-express');
 const swagDoc = require('./swagger/swagger.json');
 const { handleError } = require('./middleware/errorHandler');
-const { checkUserCreate } = require('./middleware/checkUser');
 
 const app = express();
 
