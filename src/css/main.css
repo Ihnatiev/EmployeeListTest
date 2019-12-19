@@ -115,16 +115,16 @@ span.psw {
   display: block;
   margin: 0 auto;
   margin-top: 25px;
+  padding: 12px 20px;
 }
 
-.input[type="text"],
-.input[type="password"] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+.formUser input {
+  margin-top: 5px;
+}
+
+.formUser button {
+  margin-top: 5px;
+  width: 25%;
 }
 
 .error {
