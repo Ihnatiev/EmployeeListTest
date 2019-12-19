@@ -3,8 +3,8 @@
 var app = angular.module('app')
   .controller('EmployeeCtrl', ['authService', '$scope', '$http', '$window', function (authService, $scope, $http, $window) {
 
-    const path = 'https://localhost:6969/api/';
-    
+    var path = 'https://localhost:6969/api/';
+    var vm = this;
     $scope.dpName = {
       model: null,
       availableDepartments: [
@@ -18,8 +18,13 @@ var app = angular.module('app')
       value: false
     };
 
+    function init() {
+      userIsAuthenticated = authService.getIsAuth();
+    }
+    init();
+
     $scope.maxSize = 5;
-    $scope.totalCount = 0;
+    $scope.totalCount = 1;
     $scope.pageIndex = 0;
     $scope.pageSizeSelected = 5;
 
@@ -33,16 +38,6 @@ var app = angular.module('app')
         }).catch(err => {
           alert(err);
         });
-    };
-
-    $scope.getAllEmployees();
-    $scope.pageChanged = function () {
-      $scope.getAllEmployees();
-    };
-
-    $scope.changePageSize = function () {
-      $scope.pageIndex = 0;
-      $scope.getAllEmployees();
     };
 
     $scope.getEmployeeById = function (employeeId) {
@@ -100,7 +95,7 @@ var app = angular.module('app')
         $scope.closeEmpEditDialog();
         $scope.getAllEmployees();
       }).catch(err => {
-        console.log(err.data.message);
+        alert(err.data.message);
         $scope.closeEmpEditDialog();
       });
     };
@@ -135,9 +130,7 @@ var app = angular.module('app')
     };
 
     $scope.addBtn = function () {
-      //if (authService.getIsAuth() === true) {
       $scope.showEmpAddDialog = true;
-      //}
     };
 
     $scope.editBtn = function (employeeId) {
