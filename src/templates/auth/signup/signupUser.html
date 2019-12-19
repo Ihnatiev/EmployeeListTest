@@ -1,16 +1,20 @@
-<form name="sign" class="formUser" ng-controller="SignupCtrl" ng-model="signForm">
-  <div class="container">
-    <label for="name"><b>Name</b></label>
-    <input class="input" type="text" name="name" placeholder="Enter Name" ng-model="name" required>
-    <br />
-    <label for="email"><b>Email</b></label>
-    <input class="input" type="text" ng-pattern="word" name="email" placeholder="Enter Email" ng-model="email" required>
-    <span class="error" ng-show="sign.email.$error.pattern">Invalid email!</span>
-    <br />
-    <label for="psw"><b>Password</b></label>
-    <input class="input" type="password" placeholder="Enter Password" name="upsw" ng-model="password" required>
+<form name="signUp" class="form-auth; formUser">
+  <h2 class="form-auth-heading">Signup</h2>
 
-    <button class="btn btn-success" type="submit" ng-click="onSignup()">Signup</button>
-    <button class="btn btn-danger" type="button" class="cancelbtn">Cancel</button>
-  </div>
+  <div class="alert alert-danger" ng-if="sc.signupError" role="alert">{{ sc.signupErrorMessage }}</div>
+  <div class="alert alert-success" ng-if="sc.signupSuccess" role="alert">Account created! You can <a
+      ui-sref="login">login</a> now!</div>
+
+  <label for="inputUsername" class="sr-only">Username</label>
+  <input type="text" id="inputUsername" ng-model="sc.name" class="form-control" placeholder="Username" required
+    autofocus>
+
+  <label for="inputUserEmail" class="sr-only">Email</label>
+  <input class="form-control" type="text" ng-pattern="word" name="email" placeholder="Email" ng-model="sc.email" required>
+    <span class="error" ng-show="signUp.email.$error.pattern">Invalid email!</span>
+
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" ng-model="sc.password" class="form-control" placeholder="Password" required>
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="sc.signup()">Signup</button>
 </form>
