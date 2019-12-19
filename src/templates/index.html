@@ -9,18 +9,24 @@
 </head>
 
 <body>
-  <ul class='menu'>
-    <h1><a href="#!/employees">EmployeeListApp</a></h1>
-    <li><button ng-click="onLogout()">Logout</li>
-    <li><a href="#!/user/signup">Signup</a></li>
-    <li><a href="#!/user/login">Login</a></li>
-  </ul>
-  <!-- <ng-view class="view ng-scope"></ng-view> -->
+  <nav class="navbar navbar-inverse" role="navigation" ng-controller="NavController as nc">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="index">EmployeeListApp</a>
+    </div>
+    <ul class="nav navbar-nav pull-right" ng-if="!nc.isAuthenticated">
+      <li><a ui-sref="login">Login</a></li>
+      <li><a ui-sref="signup">Signup</a></li>
+    </ul>
+    <ul class="nav navbar-nav pull-right" ng-if="nc.isAuthenticated">
+      <li><a ng-click="nc.logout()">Logout</a></li>
+    </ul>
+  </nav>
   <ui-view></ui-view>
 </body>
 <script src="js/scripts.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.22/angular-ui-router.min.js"></script>
-<script data-require="ui-bootstrap@*" data-semver="0.12.1" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<script data-require="ui-bootstrap@*" data-semver="0.12.1"
+  src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
 <script src="https://code.angularjs.org/1.5.5/angular-cookies.min.js"></script>
 
