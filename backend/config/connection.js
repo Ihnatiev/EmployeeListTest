@@ -16,9 +16,9 @@ connection.connect(function (err) {
         const createDatabase = `CREATE DATABASE IF NOT EXISTS EmployeeDB`;
         connection.query(createDatabase, function (err, results, fields) {
           if (err) {
-            //console.log('createDatabase:\n' + err);
+            console.log('createDatabase:\n' + err);
           } else {
-            //console.log('Connected to Database');
+            console.log('Connected to Database');
           }
         });
       }
@@ -37,9 +37,9 @@ connection.connect(function (err) {
         // tslint:disable-next-line: no-shadowed-variable
         connection.query(createUsersTable, (err, results, fields) => {
           if (err) {
-            // console.log('createUsersTable error:\n' + err);
+            console.log('createUsersTable error:\n' + err);
           } else {
-            // console.log('Connected to Users');
+            console.log('Connected to Users');
           }
         });
       }
@@ -56,9 +56,9 @@ connection.connect(function (err) {
         // tslint:disable-next-line: no-shadowed-variable
         connection.query(createDepartmentsTable, (err, results, fields) => {
           if (err) {
-            // console.log('createDepartmentsTable error:\n' + err);
+            console.log('createDepartmentsTable error:\n' + err);
           } else {
-            // console.log('Connected to Departments');
+            console.log('Connected to Departments');
           }
         });
       }
@@ -85,18 +85,13 @@ connection.connect(function (err) {
         // tslint:disable-next-line: no-shadowed-variable
         connection.query(createEmployeesTable, (err, results, fields) => {
           if (err) {
-            // console.log('createEmployeesTable error:\n' + err);
+            console.log('createEmployeesTable error:\n' + err);
           } else {
-            // console.log('Connected to Employees');
+            console.log('Connected to Employees');
           }
         });
       }
     });
 });
-// if (err) {
-//   console.log(err.message);
-// } else {
-//   console.log('Connected to database!');
-// }
 
 module.exports = connection;
