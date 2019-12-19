@@ -4,7 +4,7 @@
     .factory('authService', ['$http', '$state', '$window', authService]);
 
   function authService($http, $state, $window) {
-    var path = 'https://localhost:6969/api/auth';
+    var path = 'https://localhost:3002/api/auth';
     var isAuthenticated = false;
     var vm = this;
     var authService = {
