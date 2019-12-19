@@ -3,7 +3,7 @@
 var app = angular.module('app')
   .controller('EmployeeCtrl', ['authService', '$scope', '$http', '$window', function (authService, $scope, $http, $window) {
 
-    var path = 'https://localhost:6969/api/';
+    var path = 'https://localhost:3002/api/';
     var vm = this;
     $scope.dpName = {
       model: null,
