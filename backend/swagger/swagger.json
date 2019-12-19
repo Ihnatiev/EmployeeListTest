@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "title": "Swagger EmployeeList"
   },
-  "host": "localhost:4201",
+  "host": "localhost:3002",
   "basePath": "/api",
   "tags": [
     {
