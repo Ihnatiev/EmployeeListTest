@@ -1,17 +1,13 @@
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngStorage', 'ngCookies']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngStorage']);
 app.config([
   '$stateProvider',
   '$urlRouterProvider',
-  '$httpProvider',
-  '$locationProvider',
   authConfig
 ])
 
 function authConfig(
   $stateProvider,
-  $urlRouterProvider,
-  $httpProvider,
-  $locationProvider) {
+  $urlRouterProvider) {
 
   $stateProvider
     .state('index', {
