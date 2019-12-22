@@ -25,11 +25,11 @@ module.exports = {
 
   getAllEmployees: async (req, res) => {
     try {
-      var numPerPage = +req.query.pagesize;
-      var page = +req.query.page;
-      var count = await EmployeeService.getCount();
-      var results = await EmployeeService.findAll(numPerPage, page);
-      var totalEmployee = count[0].totalCount;
+      const numPerPage = +req.query.pagesize;
+      const page = +req.query.page;
+      const count = await EmployeeService.getCount();
+      const results = await EmployeeService.findAll(numPerPage, page);
+      const totalEmployee = count[0].totalCount;
       if (totalEmployee === 0) {
         res.status(404).json({
           success: false,
@@ -50,8 +50,8 @@ module.exports = {
   },
 
   createEmployee: (req, res) => {
-    var emp = { empName, empActive, empDepartment } = req.body;
-    var creator = req.userData.userId;
+    const emp = { empName, empActive, empDepartment } = req.body;
+    const creator = req.userData.userId;
     EmployeeService.create(emp, creator,
       (err, result) => {
         (err) ?
@@ -68,9 +68,9 @@ module.exports = {
   },
 
   updateEmployeeById: (req, res) => {
-    var employeeId = req.params.employeeId;
-    var creator = req.userData.userId;
-    var emp = { empName, empActive, empDepartment } = req.body;
+    const employeeId = req.params.employeeId;
+    const creator = req.userData.userId;
+    const emp = { empName, empActive, empDepartment } = req.body;
     EmployeeService.update(employeeId, creator, emp,
       (err, result) => {
         try {
@@ -93,8 +93,8 @@ module.exports = {
   },
 
   deleteEmployeeById: (req, res) => {
-    var employeeId = req.params.employeeId;
-    var creator = req.userData.userId;
+    const employeeId = req.params.employeeId;
+    const creator = req.userData.userId;
     EmployeeService.delete(employeeId, creator,
       (err, result) => {
         try {
