@@ -16,7 +16,7 @@ module.exports = {
               message: 'User created!',
               userId: newUser
             });
-          };
+          }
           if (error) {
             return res.status(500).json({
               success: false,
@@ -44,7 +44,7 @@ module.exports = {
               userId: fetchedUser.id,
               userName: fetchedUser.name
             });
-          };
+          }
           if (!result) {
             return res.status(401).json({
               success: false,
