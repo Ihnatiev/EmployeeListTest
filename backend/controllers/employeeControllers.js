@@ -10,7 +10,7 @@ module.exports = {
               success: false,
               message: 'Employee not found!'
             });
-          };
+          }
           if (employee != 0) {
             return res.status(200).json({
               success: true,
@@ -38,7 +38,7 @@ module.exports = {
           success: false,
           message: 'Employee not found'
         });
-      };
+      }
       if (count && results) {
         return res.status(200).json({
           employees: results,
@@ -64,7 +64,7 @@ module.exports = {
               success: false,
               message: 'Adding employee failed!'
             });
-          };
+          }
           if (result) {
             return res.status(201).json({
               success: true,
@@ -93,7 +93,7 @@ module.exports = {
               success: true,
               message: 'Update successfully!'
             });
-          };
+          }
           if (result.affectedRows == 0) {
             return res.status(401).json({
               success: false,
@@ -120,7 +120,7 @@ module.exports = {
               success: true,
               message: 'Deletion successful!'
             });
-          };
+          }
           if (result.affectedRows == 0) {
             return res.status(401).json({
               success: false,
