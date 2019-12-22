@@ -17,4 +17,4 @@ const checkUserLogin = (req, res, next) => {
 module.exports = {
   checkUserCreate,
   checkUserLogin
-}
+};
