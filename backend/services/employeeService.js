@@ -2,20 +2,20 @@ const sql = require('../config/connection');
 const Bluebird = require('bluebird');
 const EmployeeModel = require('../models/employee.model');
 
-var queryAsync = Bluebird.promisify(sql.query.bind(sql));
+const queryAsync = Bluebird.promisify(sql.query.bind(sql));
 
 EmployeeModel.getCount = async function () {
-  var result = queryAsync(`SELECT count(*) as totalCount FROM EmployeeDB.Employees`);
+  const result = queryAsync(`SELECT count(*) as totalCount FROM EmployeeDB.Employees`);
   return result;
 }
 
 EmployeeModel.findAll = async function (numPerPage, page) {
 
-  var skip = page * numPerPage;
-  var end_limit = numPerPage;
-  var limit = skip + ',' + end_limit;
+  const skip = page * numPerPage;
+  const end_limit = numPerPage;
+  const limit = skip + ',' + end_limit;
 
-  var queryResults = queryAsync(`SELECT empID, empName, creator,
+  const queryResults = queryAsync(`SELECT empID, empName, creator,
     IF(empActive, 'Yes', 'No')
     empActive, dpName FROM EmployeeDB.Employees
     INNER JOIN EmployeeDB.Departments ON empDepartment = dpID ORDER BY empID LIMIT ` + limit)
@@ -63,7 +63,7 @@ EmployeeModel.find = function (employeeId, result) {
 }
 
 EmployeeModel.update = function (employeeId, creator, emp, result) {
-  var employee = new EmployeeModel({
+  const employee = new EmployeeModel({
     empName: emp.empName,
     empActive: emp.empActive,
     empDepartment: emp.empDepartment,
