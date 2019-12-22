@@ -1,6 +1,6 @@
 const checkUserCreate = (req, res, next) => {
   if (!req.body.name || !req.body.email || !req.body.password) {
-    return resizeBy.status(400).send('Invalid data');
+    return res.status(400).send('Invalid data');
   } else {
     next();
   }
@@ -8,7 +8,7 @@ const checkUserCreate = (req, res, next) => {
 
 const checkUserLogin = (req, res, next) => {
   if (!req.body.email || !req.body.password) {
-    return resizeBy.status(400).send('Invalid data');
+    return res.status(400).send('Invalid data');
   } else {
     next();
   }
