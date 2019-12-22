@@ -34,7 +34,6 @@ connection.connect(function (err) {
                 INSERT INTO EmployeeDB.users (id, name, email, password) VALUES (
                 "f6f7dd58-0b07-494e-85d6-c0c03b902256", "Test User", "testUser@test.com",
                 "$2b$10$8UbnMHU9mvmwzyNKl/kCFeG3yBA1MOEiBProvq98.aBEPGWdxVnJC");`;
-        // tslint:disable-next-line: no-shadowed-variable
         connection.query(createUsersTable, (err, results, fields) => {
           if (err) {
             console.log('createUsersTable error:\n' + err);
@@ -53,7 +52,6 @@ connection.connect(function (err) {
               INSERT INTO EmployeeDB.departments (dpID, dpName) VALUES (1, "HR");
               INSERT INTO EmployeeDB.departments (dpID, dpName) VALUES (2, "Tech");
               INSERT INTO EmployeeDB.departments (dpID, dpName) VALUES (3, "Finance");`;
-        // tslint:disable-next-line: no-shadowed-variable
         connection.query(createDepartmentsTable, (err, results, fields) => {
           if (err) {
             console.log('createDepartmentsTable error:\n' + err);
@@ -82,7 +80,6 @@ connection.connect(function (err) {
               VALUES (3, "Tina", false, 2, "f6f7dd58-0b07-494e-85d6-c0c03b902256");
               INSERT INTO EmployeeDB.employees (empID, empName, empActive, empDepartment, creator)
               VALUES (4, "Homer", true, 3, "f6f7dd58-0b07-494e-85d6-c0c03b902256");`;
-        // tslint:disable-next-line: no-shadowed-variable
         connection.query(createEmployeesTable, (err, results, fields) => {
           if (err) {
             console.log('createEmployeesTable error:\n' + err);
