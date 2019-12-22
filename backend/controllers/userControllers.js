@@ -10,20 +10,23 @@ module.exports = {
       const userObj = { name, email, password } = req.body;
       userService.save(userObj,
         (newUser, error) => {
-          (newUser) ?
-            res.status(201).json({
+          if (newUser) {
+            return res.status(201).json({
               success: true,
               message: 'User created!',
               userId: newUser
-            }) :
-            res.status(500).json({
+            });
+          };
+          if (error) {
+            return res.status(500).json({
               success: false,
               message: 'This email already exists.'
             });
+          };
         });
     } catch (error) {
       throw new ErrorHandler(500, 'An error occurred trying to process your request');
-    }
+    };
   },
 
   login: async (req, res) => {
@@ -46,10 +49,10 @@ module.exports = {
             return res.status(401).json({
               success: false,
               message: 'Email and password does not match'
-            })
+            });
           };
         } else {
-          res.status(500).json({
+          return res.status(500).json({
             status: 'error',
             message: "Authentication failed."
           });
