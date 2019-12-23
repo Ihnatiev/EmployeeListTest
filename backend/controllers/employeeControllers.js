@@ -33,7 +33,7 @@ module.exports = {
       const count = await EmployeeService.getCount();
       const results = await EmployeeService.findAll(numPerPage, page);
       const totalEmployee = count[0].totalCount;
-      if (totalEmployee == 0) {
+      if (totalEmployee === 0) {
         return res.status(404).json({
           success: false,
           message: 'Employee not found'
@@ -94,7 +94,7 @@ module.exports = {
               message: 'Update successfully!'
             });
           }
-          if (result.affectedRows == 0) {
+          if (result.affectedRows === 0) {
             return res.status(401).json({
               success: false,
               message: 'You are not authorized!'
@@ -121,7 +121,7 @@ module.exports = {
               message: 'Deletion successful!'
             });
           }
-          if (result.affectedRows == 0) {
+          if (result.affectedRows === 0) {
             return res.status(401).json({
               success: false,
               message: 'You are not authorized!'
